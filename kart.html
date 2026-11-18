@@ -1,89 +1,73 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
-<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
-    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
-    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
-    <script class="ndk4h64o">
-      if(window.eruda){
-        eruda.init({
-          theme: 'dark'
-        });
-
-        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
-
-        sessionStorage.setItem('__console_available', true);
-        document.addEventListener('showconsole', function () {eruda.show()});
-        document.addEventListener('hideconsole', function () {eruda.hide()});
-      }else if(document.querySelector('c-toggler')){
-        document.querySelector('c-toggler').style.display = 'none';
-      }
-      setTimeout(function(){
-        var scripts = document.querySelectorAll('.ndk4h64o');
-        scripts.forEach(function(el){document.head.removeChild(el)});
-      }, 0);
-    </script><!-- Injected code, this is not present in original code -->
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>تشخیص نام بانک از روی شماره کارت و بررسی صحت شبا | چرتکه</title>
-<link rel="stylesheet" href="style.css?v=3">
+<title>تشخیص نام بانک از شماره کارت و بررسی صحت شبا | چرتکه</title>
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 <main>
-  <div class="hero">
-    <h1>💳 تشخیص بانک و اعتبارسنجی کارت و شبا</h1>
-    <p>تشخیص فوری نام بانک صادرکننده و بررسی صحت شماره کارت ۱۶ رقمی و شماره شبا</p>
-  </div>
   <div class="box">
+    <h1 style="font-size:17px;color:var(--pr);margin-bottom:14px">💳 تشخیص بانک و اعتبارسنجی کارت و شبا</h1>
     <div class="fg">
-      <label>شماره کارت ۱۶ رقمی:</label>
-      <input type="text" id="c-in" class="inp" maxlength="16" placeholder="مثلاً 6037991234567890" inputmode="numeric">
+      <label>شماره کارت ۱۶ رقمی (یا ۶ رقم اول برای تشخیص بانک)</label>
+      <input type="text" id="c" class="inp" placeholder="603799..." maxlength="16" oninput="chkNum(this,16,'c-err')" inputmode="numeric">
+      <div id="c-err" style="color:#ef4444;font-size:11px;font-weight:700;margin-top:4px;display:none"></div>
     </div>
-    <button class="btn" onclick="chkCard()">🔍 بررسی شماره کارت</button>
-    <div id="res1" class="res">
-      <div class="r-row"><span>نام بانک صادرکننده:</span><b id="b-nm">-</b></div>
-      <div class="r-row"><span>اعتبار ساختار شماره کارت:</span><b id="b-vl">-</b></div>
-    </div>
-  </div>
-  <div class="box">
     <div class="fg">
-      <label>شماره شبا (۲۴ رقم بدون IR یا با IR):</label>
-      <input type="text" id="s-in" class="inp" maxlength="26" placeholder="IR120170000000123456789012">
+      <label>شماره شبا (۲۴ رقم بعد از IR را وارد کنید)</label>
+      <div style="display:flex;direction:ltr;align-items:stretch">
+        <span style="background:var(--pr);color:#fff;font-weight:900;padding:10px 14px;border-radius:10px 0 0 10px;display:flex;align-items:center;font-size:15px;letter-spacing:1px">IR</span>
+        <input type="text" id="sh" class="inp" placeholder="000000000000000000000000" maxlength="24" oninput="chkNum(this,24,'sh-err')" inputmode="numeric" style="border-radius:0 10px 10px 0;border-left:none">
+      </div>
+      <div id="sh-err" style="color:#ef4444;font-size:11px;font-weight:700;margin-top:4px;display:none"></div>
     </div>
-    <button class="btn" onclick="chkSheba()">🔍 بررسی صحت شماره شبا</button>
-    <div id="res2" class="res">
-      <div class="r-row"><span>وضعیت صحت شماره شبا:</span><b id="sh-vl">-</b></div>
+    <button class="btn" onclick="calc()">بررسی اعتبار کارت و شبا</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>نام بانک صادرکننده:</span><b id="r1">-</b></div>
+      <div class="r-row"><span>اعتبار شماره کارت:</span><b id="r2">-</b></div>
+      <div class="r-row"><span>اعتبار شماره شبا:</span><b id="r3">-</b></div>
     </div>
   </div>
   <div class="box seo">
-    <h2>تشخیص بانک از روی ۶ رقم اول کارت و الگوریتم شبا</h2>
-    <p>۶ رقم اول هر کارت بانکی (پیش‌شماره BIN) مشخص‌کننده بانک صادرکننده است و صحت ۱۶ رقم کارت با الگوریتم جهانی Luhn و شماره شبا با استاندارد ISO-7064 بررسی می‌شود.</p>
+    <h2>الگوریتم تشخیص شماره کارت و شبا</h2>
+    <p>شماره کارت بانکی با الگوریتم استاندارد لوهن (Luhn) و شماره شبا (۲۴ رقم پس از IR ثابت) با استاندارد جهانی ISO-7064 بررسی و نام بانک استخراج می‌شود.</p>
   </div>
 </main>
-<script src="app.js?v=3" crossorigin="anonymous"></script>
+<script src="app.js?v=4"></script>
 <script>
-const BN = {"603799":"بانک ملی ایران","589210":"بانک سپه","603769":"بانک صادرات","610433":"بانک ملت","627353":"بانک تجارت","585983":"بانک تجارت","603770":"بانک کشاورزی","628023":"بانک مسکن","621986":"بانک سامان (بلوبانک)","622106":"بانک پارسیان","502229":"بانک پاسارگاد","589463":"بانک رفاه کارگران","636214":"بانک آینده","502806":"بانک شهر","504172":"بانک رسالت","606373":"بانک قرض‌الحسنه مهر ایران","627412":"بانک اقتصاد نوین","639346":"بانک سینا","627760":"پست بانک ایران","505416":"بانک گردشگری","502938":"بانک دی","627488":"بانک کارآفرین"};
-function chkCard(){
-  let c = document.getElementById("c-in").value.replace(/\D/g,"");
-  if(c.length < 6) return alert("حداقل ۶ رقم اول کارت را وارد کنید");
-  let bName = BN[c.slice(0,6)] || "بانک یا موسسه دیگر";
-  let ok = false;
-  if(c.length === 16){
-    let s = 0;
-    for(let i=0;i<16;i++){ let d = +c[i] * (i%2===0?2:1); s += d>9 ? d-9 : d; }
-    ok = (s % 10 === 0);
-  }
-  document.getElementById("b-nm").innerText = bName;
-  document.getElementById("b-vl").innerText = c.length<16 ? "برای بررسی صحت، ۱۶ رقم کامل را وارد کنید" : ok ? "✅ معتبر و صحیح" : "❌ شماره کارت اشتباه است!";
-  document.getElementById("res1").classList.add("on");
+const BC={'603799':'بانک ملی','589210':'بانک سپه','627648':'توسعه صادرات','627961':'صنعت و معدن','603770':'کشاورزی','628023':'مسکن','627760':'پست بانک','502908':'توسعه تعاون','627412':'اقتصاد نوین','622106':'پارسیان','502229':'پاسارگاد','627488':'کارآفرین','621986':'سامان','639346':'سینا','639607':'سرمایه','636214':'آینده','502806':'شهر','502938':'دی','603769':'صادرات','610433':'ملت','627353':'تجارت','589463':'رفاه','639370':'مهر اقتصاد','504172':'رسالت','606373':'مهر ایران','505416':'گردشگری','636949':'حکمت','585983':'تجارت'};
+const BS={'017':'بانک ملی','015':'بانک سپه','020':'توسعه صادرات','011':'صنعت و معدن','016':'کشاورزی','014':'مسکن','021':'پست بانک','022':'توسعه تعاون','055':'اقتصاد نوین','054':'پارسیان','057':'پاسارگاد','053':'کارآفرین','056':'سامان','059':'سینا','058':'سرمایه','062':'آینده','061':'شهر','066':'دی','019':'صادرات','012':'ملت','018':'تجارت','013':'رفاه','070':'رسالت','060':'مهر ایران','064':'گردشگری'};
+function chkNum(el,mx,errId){
+  let raw=el.value.replace(/^IR/i,''),cln=raw.replace(/\D/g,'').slice(0,mx);
+  let bx=document.getElementById(errId);
+  if(raw!==cln){bx.innerText='⚠️ فقط وارد کردن اعداد مجاز است!';bx.style.display='block';}
+  else bx.style.display='none';
+  el.value=cln;
 }
-function chkSheba(){
-  let s = document.getElementById("s-in").value.toUpperCase().replace(/[^0-9A-Z]/g,"");
-  if(!s.startsWith("IR")) s = "IR" + s;
-  if(s.length !== 26) return alert("شماره شبا باید ۲۴ رقم باشد");
-  let mv = s.slice(4) + "1827" + s.slice(2,4);
-  let rem = BigInt(mv) % 97n;
-  document.getElementById("sh-vl").innerText = rem === 1n ? "✅ شماره شبا کاملاً صحیح و معتبر است" : "❌ شماره شبا اشتباه است!";
-  document.getElementById("res2").classList.add("on");
+function luhn(s){
+  if(s.length!==16)return false;
+  let sum=0;for(let i=0;i<16;i++){let d=+s[i]*(i%2===0?2:1);sum+=d>9?d-9:d;}
+  return sum%10===0;
+}
+function calc(){
+  let c=document.getElementById('c').value.replace(/\D/g,'');
+  let sh=document.getElementById('sh').value.replace(/\D/g,'');
+  let bName=c.length>=6?(BC[c.slice(0,6)]||'بانک نامشخص'):(sh.length>=5?(BS[sh.slice(2,5)]||'بانک نامشخص'):'وارد نشده');
+  let cOk=!c?'وارد نشده':c.length<16?`ناقص (${fmt(c.length)} از ۱۶ رقم)`:(luhn(c)?'✅ معتبر و صحیح':'❌ نامعتبر (خطای رقم)');
+  let shOk='وارد نشده';
+  if(sh){
+    if(sh.length!==24)shOk=`❌ ناقص (${fmt(sh.length)} از ۲۴ رقم)`;
+    else{
+      let mv=sh.slice(2)+'1827'+sh.slice(0,2);
+      shOk=BigInt(mv)%97n===1n?'✅ شبای معتبر و صحیح':'❌ شبای نامعتبر';
+    }
+  }
+  document.getElementById('r1').innerText=bName;
+  document.getElementById('r2').innerText=cOk;
+  document.getElementById('r3').innerText=shOk;
+  document.getElementById('res').classList.add('on');
 }
 </script>
 </body>
