@@ -87,4 +87,4 @@ function numToFa(n){
   let k=Math.floor((n%1e6)/1e3);if(k)o.push(k+" هزار");
   let r=n%1e3;if(r)o.push(r);
   return o.join(" و ");
-                                    }
+                                                    }
