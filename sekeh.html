@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه آنلاین حباب سکه و ارزش ذاتی | چرتکه</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>🫧 محاسبه حباب و ارزش ذاتی سکه</h1>
+    <p>بررسی ارزش واقعی طلای به کار رفته در سکه تمام، نیم، ربع و گرمی</p>
+  </div>
+  <div class="box">
+    <div class="fg">
+      <label>نوع سکه را انتخاب کنید:</label>
+      <select id="sk-t" class="inp" style="direction:rtl;text-align:right">
+        <option value="9.76">سکه تمام بهار آزادی / امامی (۸.۱۳۳ گرم عیار ۹۰۰)</option>
+        <option value="4.88">نیم سکه بهار آزادی (۴.۰۶۶ گرم عیار ۹۰۰)</option>
+        <option value="2.44">ربع سکه بهار آزادی (۲.۰۳۳ گرم عیار ۹۰۰)</option>
+        <option value="1.22">سکه یک گرمی بانکی (۱.۰۱ گرم عیار ۹۰۰)</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>قیمت روز هر گرم طلای ۱۸ عیار در بازار (تومان):</label>
+      <input type="text" id="sk-g" class="inp money" placeholder="مثلاً 4,500,000" inputmode="numeric">
+      <div class="w-out"></div>
+    </div>
+    <div class="fg">
+      <label>قیمت فعلی این سکه در بازار (تومان):</label>
+      <input type="text" id="sk-p" class="inp money" placeholder="مثلاً 52,000,000" inputmode="numeric">
+      <div class="w-out"></div>
+    </div>
+    <button class="btn" onclick="calcSek()">🧮 محاسبه حباب سکه</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>ارزش ذاتی (طلای خالص سکه):</span><b id="k-val">0</b></div>
+      <div class="r-row"><span>مبلغ حباب سکه:</span><b id="k-bub">0</b></div>
+      <div class="r-row"><span>درصد حباب:</span><b id="k-pct">0%</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>حباب سکه چیست و چگونه محاسبه می‌شود؟</h2>
+    <p>سکه طلا دارای عیار ۲۱.۶ (۹۰۰ در هزار) است؛ بنابراین یک سکه تمام معادل ۹.۷۶ گرم طلای ۱۸ عیار ارزش ذاتی دارد. اختلاف قیمت بازار سکه با ارزش طلای داخل آن، «حباب سکه» نامیده می‌شود.</p>
+  </div>
+</main>
+<script src="app.js" crossorigin="anonymous"></script>
+<script>
+function calcSek(){
+  let eq = +document.getElementById("sk-t").value, g = val("sk-g"), p = val("sk-p");
+  if(!g || !p) return alert("لطفاً قیمت گرم طلا و قیمت سکه را وارد کنید");
+  let realV = eq * g + 50000;
+  let bub = p - realV;
+  let pct = ((bub / realV) * 100).toFixed(1);
+  document.getElementById("k-val").innerText = fmt(realV) + " تومان";
+  document.getElementById("k-bub").innerText = fmt(bub) + " تومان";
+  document.getElementById("k-pct").innerText = pct + " ٪";
+  document.getElementById("res").classList.add("on");
+}
+</script>
+</body>
+</html>

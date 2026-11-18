@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه سود سپرده بانکی آنلاین | چرتکه</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>💰 محاسبه سود سپرده بانکی</h1>
+    <p>محاسبه دقیق سود روزانه، ماهانه و سالانه انواع سپرده‌های بانکی</p>
+  </div>
+  <div class="box">
+    <div class="fg">
+      <label>مبلغ سپرده بانکی (تومان):</label>
+      <input type="text" id="s-amt" class="inp money" placeholder="مثلاً 500,000,000" inputmode="numeric">
+      <div class="w-out"></div>
+    </div>
+    <div class="fg">
+      <label>نرخ سود سالانه بانک (درصد):</label>
+      <input type="number" id="s-rt" class="inp" value="22.5" step="0.5">
+    </div>
+    <div class="fg">
+      <label>تعداد روز ماندگاری پول (برای یک ماه 30 بگذارید):</label>
+      <input type="number" id="s-dy" class="inp" value="30">
+    </div>
+    <button class="btn" onclick="calcSep()">🧮 محاسبه سود سپرده</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>سود ۱ روز:</span><b id="s-d1">0</b></div>
+      <div class="r-row"><span>سود ۳۰ روزه (ماهانه):</span><b id="s-m1">0</b></div>
+      <div class="r-row"><span>سود دوره انتخابی شما:</span><b id="s-cu">0</b></div>
+      <div class="r-row"><span>سود کل سال (۳۶۵ روز):</span><b id="s-y1">0</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>فرمول محاسبه سود سپرده بانکی</h2>
+    <p>سود سپرده بانکی از ضرب «مبلغ سپرده × نرخ سود × تعداد روز» تقسیم بر ۳۶۵۰۰ به دست می‌آید. با این ابزار می‌توانید سود ماه‌های ۳۰ روزه و ۳۱ روزه را به دقت محاسبه کنید.</p>
+  </div>
+</main>
+<script src="app.js" crossorigin="anonymous"></script>
+<script>
+function calcSep(){
+  let P = val("s-amt"), R = Number(document.getElementById("s-rt").value), D = Number(document.getElementById("s-dy").value);
+  if(!P) return alert("مبلغ سپرده را وارد کنید");
+  let d1 = (P * R * 1) / 36500;
+  document.getElementById("s-d1").innerText = fmt(d1) + " تومان";
+  document.getElementById("s-m1").innerText = fmt(d1 * 30) + " تومان";
+  document.getElementById("s-cu").innerText = fmt(d1 * D) + " تومان";
+  document.getElementById("s-y1").innerText = fmt(d1 * 365) + " تومان";
+  document.getElementById("res").classList.add("on");
+}
+</script>
+</body>
+</html>

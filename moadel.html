@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه آنلاین معدل دانشگاه و مدرسه با ضریب | چرتکه</title>
+<link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+<main>
+  <div class="box">
+    <h1 style="font-size:17px;color:var(--pr);margin-bottom:14px">🎓 محاسبه آنلاین معدل (با واحد و ضریب)</h1>
+    <div id="rows"></div>
+    <button class="btn" style="background:#64748b;margin-bottom:8px;padding:8px" onclick="addR()">+ افزودن ردیف درس جدید</button>
+    <button class="btn" onclick="calc()">محاسبه دقیق معدل</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>معدل دقیق شما:</span><b id="r1">0</b></div>
+      <div class="r-row"><span>مجموع کل واحدها (ضرایب):</span><b id="r2">0</b></div>
+      <div class="r-row"><span>وضعیت تحصیلی:</span><b id="r3">-</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>نحوه محاسبه معدل کل</h2>
+    <p>برای محاسبه معدل، نمره هر درس در تعداد واحد (یا ضریب) آن ضرب شده و مجموع کل امتیازات بر جمع کل واحدها تقسیم می‌شود.</p>
+  </div>
+</main>
+<script src="app.js?v=3" crossorigin="anonymous"></script>
+<script>
+let cnt=0;
+function addR(g='',u=1){
+  cnt++;
+  let d=document.createElement('div');
+  d.style='display:flex;gap:8px;margin-bottom:8px;align-items:center';
+  d.innerHTML=`<span style="font-size:12px;width:45px">درس ${cnt}:</span>
+    <input type="number" class="inp gr" placeholder="نمره (مثلا 18.5)" value="${g}" step="0.25" style="flex:2">
+    <input type="number" class="inp un" placeholder="واحد" value="${u}" min="1" style="flex:1">`;
+  document.getElementById('rows').appendChild(d);
+}
+addR(18,3);addR(16.5,2);addR(19,3);addR(15,2);
+function calc(){
+  let gs=document.querySelectorAll('.gr'),us=document.querySelectorAll('.un');
+  let sum=0,tu=0;
+  gs.forEach((el,i)=>{
+    let g=parseFloat(el.value),u=parseFloat(us[i].value)||1;
+    if(!isNaN(g)){sum+=g*u;tu+=u;}
+  });
+  if(!tu)return;
+  let avg=sum/tu;
+  document.getElementById('r1').innerText=avg.toFixed(2)+' از ۲۰';
+  document.getElementById('r2').innerText=tu+' واحد';
+  document.getElementById('r3').innerText=avg>=17?'الف (ممتاز 🌟)':avg>=12?'عادی (قبول ✅)':'مشروط ⚠️';
+  document.getElementById('res').classList.add('on');
+}
+</script>
+</body>
+</html>

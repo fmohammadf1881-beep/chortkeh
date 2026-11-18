@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه سن بارداری و تاریخ دقیق زایمان شمسی | چرتکه</title>
+<link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+<main>
+  <div class="box">
+    <h1 style="font-size:17px;color:var(--pr);margin-bottom:14px">👶 محاسبه سن بارداری و تاریخ زایمان</h1>
+    <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px">اولین روز آخرین قاعدگی (تاریخ شمسی):</label>
+    <div class="fg" style="display:flex;gap:8px">
+      <input type="number" id="d" class="inp" placeholder="روز" value="1" style="flex:1;text-align:center">
+      <input type="number" id="m" class="inp" placeholder="ماه" value="1" style="flex:1;text-align:center">
+      <input type="number" id="y" class="inp" placeholder="سال" value="1404" style="flex:1.3;text-align:center">
+    </div>
+    <button class="btn" onclick="calc()">محاسبه زمان زایمان</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>سن فعلی بارداری:</span><b id="r1">0</b></div>
+      <div class="r-row"><span>تاریخ احتمالی زایمان:</span><b id="r2">0</b></div>
+      <div class="r-row"><span>دوره بارداری:</span><b id="r3">0</b></div>
+      <div class="r-row"><span>روزهای باقی‌مانده:</span><b id="r4">0</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>فرمول محاسبه تاریخ زایمان (قانون نگل)</h2>
+    <p>دوره کامل بارداری ۴۰ هفته (معادل ۲۸۰ روز) از اولین روز آخرین قاعدگی (LMP) محاسبه می‌شود.</p>
+  </div>
+</main>
+<script src="app.js?v=3" crossorigin="anonymous"></script>
+<script>
+function j2d(y,m,d){return y*365+Math.floor(y/4)+(m<=7?(m-1)*31:(m-7)*30+186)+d;}
+function d2j(dn){
+  let y=Math.floor(dn/365.25);
+  let r=dn-(y*365+Math.floor(y/4));
+  if(r<=0){y--;r=dn-(y*365+Math.floor(y/4));}
+  let m=r<=186?Math.ceil(r/31):Math.ceil((r-186)/30)+6;
+  let d=r-(m<=7?(m-1)*31:(m-7)*30+186);
+  return `${y}/${m}/${d}`;
+}
+function calc(){
+  let y=parseInt(document.getElementById('y').value),m=parseInt(document.getElementById('m').value),d=parseInt(document.getElementById('d').value);
+  const p=new Intl.DateTimeFormat('fa-IR-u-nu-latn',{year:'numeric',month:'numeric',day:'numeric'}).format(new Date()).split('/');
+  let nowD=j2d(+p[0],+p[1],+p[2]),stD=j2d(y,m,d);
+  let pass=Math.max(0,nowD-stD),rem=Math.max(0,280-pass);
+  let w=Math.floor(pass/7),dy=pass%7;
+  document.getElementById('r1').innerText=`${w} هفته و ${dy} روز`;
+  document.getElementById('r2').innerText=d2j(stD+280);
+  document.getElementById('r3').innerText=w<14?'سه‌ماهه اول':w<28?'سه‌ماهه دوم':'سه‌ماهه سوم';
+  document.getElementById('r4').innerText=rem+' روز تا زایمان';
+  document.getElementById('res').classList.add('on');
+}
+</script>
+</body>
+</html>

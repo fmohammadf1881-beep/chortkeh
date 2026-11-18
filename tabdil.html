@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تبدیل مثقال به گرم و سوت طلا + تبدیل هکتار | چرتکه</title>
+<link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+<main>
+  <div class="box">
+    <h1 style="font-size:17px;color:var(--pr);margin-bottom:14px">⚖️ تبدیل واحد طلا و مساحت زمین</h1>
+    <div class="fg">
+      <label>مقدار را وارد کنید</label>
+      <input type="number" id="v" class="inp" value="1" step="any">
+    </div>
+    <div class="fg">
+      <label>نوع تبدیل را انتخاب کنید</label>
+      <select id="tp" class="inp" style="direction:rtl;text-align:right">
+        <option value="m2g">مثقال طلا به گرم و سوت</option>
+        <option value="g2m">گرم طلا به مثقال و سوت</option>
+        <option value="o2g">انس جهانی به گرم و مثقال</option>
+        <option value="h2m">هکتار به مترمربع و جریب</option>
+        <option value="mt2h">مترمربع به هکتار و جریب</option>
+      </select>
+    </div>
+    <button class="btn" onclick="calc()">تبدیل کن</button>
+    <div id="res" class="res">
+      <div class="r-row"><span id="l1">نتیجه اول:</span><b id="r1">0</b></div>
+      <div class="r-row"><span id="l2">نتیجه دوم:</span><b id="r2">0</b></div>
+      <div class="r-row"><span id="l3">نتیجه سوم:</span><b id="r3">0</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>روابط تبدیل واحد طلا و زمین</h2>
+    <p>هر ۱ مثقال طلای صیرفی ایران برابر با ۴.۶۰۸۳ گرم است. هر ۱ گرم برابر ۱۰۰۰ سوت و هر انس جهانی طلا برابر ۳۱.۱۰۳۵ گرم می‌باشد. همچنین هر هکتار معادل ۱۰,۰۰۰ مترمربع است.</p>
+  </div>
+</main>
+<script src="app.js?v=3" crossorigin="anonymous"></script>
+<script>
+function calc(){
+  let v=parseFloat(document.getElementById('v').value)||0,t=document.getElementById('tp').value;
+  const set=(a,b,c,d,e,f)=>{
+    document.getElementById('l1').innerText=a;document.getElementById('r1').innerText=b;
+    document.getElementById('l2').innerText=c;document.getElementById('r2').innerText=d;
+    document.getElementById('l3').innerText=e;document.getElementById('r3').innerText=f;
+  };
+  if(t==='m2g'){
+    let g=v*4.6083;
+    set('معادل به گرم:',g.toFixed(3)+' گرم','معادل به سوت:',fmt(g*1000)+' سوت','معادل طلای ۱۸ عیار:',(v*4.3318).toFixed(3)+' گرم');
+  }else if(t==='g2m'){
+    set('معادل به مثقال:',(v/4.6083).toFixed(3)+' مثقال','معادل به سوت:',fmt(v*1000)+' سوت','معادل به انس:',(v/31.1035).toFixed(4)+' انس');
+  }else if(t==='o2g'){
+    let g=v*31.1035;
+    set('معادل به گرم:',g.toFixed(2)+' گرم','معادل به مثقال:',(g/4.6083).toFixed(2)+' مثقال','معادل به سوت:',fmt(g*1000)+' سوت');
+  }else if(t==='h2m'){
+    let m=v*10000;
+    set('معادل به مترمربع:',fmt(m)+' مترمربع','معادل به جریب:',(m/1000).toFixed(1)+' جریب','فوت مربع:',fmt(m*10.764)+' فوت');
+  }else{
+    set('معادل به هکتار:',(v/10000).toFixed(4)+' هکتار','معادل به جریب:',(v/1000).toFixed(2)+' جریب','کیلومترمربع:',(v/1000000).toFixed(6));
+  }
+  document.getElementById('res').classList.add('on');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه دقیق سن آنلاین (شمسی به سال، ماه، روز و ساعت) | چرتکه</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>🎂 محاسبه دقیق سن و روزشمار تولد</h1>
+    <p>محاسبه سن به سال، ماه، روز، ساعت و فاصله تا تولد بعدی شما</p>
+  </div>
+  <div class="box">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+      <div class="fg"><label>روز تولد:</label><input type="number" id="bd" class="inp" value="15" min="1" max="31"></div>
+      <div class="fg"><label>ماه تولد:</label><input type="number" id="bm" class="inp" value="6" min="1" max="12"></div>
+      <div class="fg"><label>سال تولد:</label><input type="number" id="by" class="inp" placeholder="1378"></div>
+    </div>
+    <button class="btn" onclick="calcSen()">🧮 محاسبه دقیق سن</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>سن دقیق شما:</span><b id="a-ex">-</b></div>
+      <div class="r-row"><span>مجموع روزهای زندگی:</span><b id="a-dy">0</b></div>
+      <div class="r-row"><span>مجموع ساعات سپری‌شده:</span><b id="a-hr">0</b></div>
+      <div class="r-row"><span>مانده تا تولد بعدی شما:</span><b id="a-nx">-</b></div>
+      <div class="r-row"><span>فصل تولد:</span><b id="a-sn">-</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>محاسبه آنلاین سن با تاریخ هجری شمسی</h2>
+    <p>با وارد کردن روز، ماه و سال تولد شمسی خود در سامانه چرتکه، سن دقیق شما تا امروز محاسبه شده و تعداد روزهای باقی‌مانده تا جشن تولد بعدی‌تان نمایش داده می‌شود.</p>
+  </div>
+</main>
+<script src="app.js" crossorigin="anonymous"></script>
+<script>
+function calcSen(){
+  let d = +document.getElementById("bd").value, m = +document.getElementById("bm").value, y = +document.getElementById("by").value;
+  if(!y || y < 1300) return alert("لطفاً سال تولد شمسی (مثلاً 1378) را وارد کنید");
+  let p = new Intl.DateTimeFormat('en-u-ca-persian',{year:'numeric',month:'numeric',day:'numeric'}).format(new Date()).split('/');
+  let cm = +p[0], cd = +p[1], cy = parseInt(p[2]);
+  let yr = cy - y, mt = cm - m, dy = cd - d;
+  if(dy < 0){ dy += 30; mt--; }
+  if(mt < 0){ mt += 12; yr--; }
+  let totDays = Math.round(yr * 365.25 + mt * 30.4 + dy);
+  let remM = (11 - mt), remD = (30 - dy);
+  let sn = m<=3?"بهار 🌸":m<=6?"تابستان ☀️":m<=9?"پاییز 🍁":"زمستان ❄️";
+  document.getElementById("a-ex").innerText = `${fmt(yr)} سال و ${fmt(mt)} ماه و ${fmt(dy)} روز`;
+  document.getElementById("a-dy").innerText = fmt(totDays) + " روز";
+  document.getElementById("a-hr").innerText = fmt(totDays * 24) + " ساعت";
+  document.getElementById("a-nx").innerText = `${fmt(remM)} ماه و ${fmt(remD)} روز دیگر`;
+  document.getElementById("a-sn").innerText = sn;
+  document.getElementById("res").classList.add("on");
+}
+</script>
+</body>
+</html>

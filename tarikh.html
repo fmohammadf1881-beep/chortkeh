@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تبدیل تاریخ آنلاین (شمسی، میلادی و قمری به یکدیگر) | چرتکه</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>📅 تبدیل تاریخ دوطرفه (شمسی، میلادی، قمری)</h1>
+    <p id="td-b" style="color:#1e3a8a;font-weight:700;margin-top:6px">مرجع دقیق تبدیل تقویم‌ها به یکدیگر</p>
+  </div>
+  <div class="box">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="fg">
+        <label>تبدیل از تقویم:</label>
+        <select id="c-fr" class="inp" style="direction:rtl;text-align:right" onchange="upM()">
+          <option value="j">هجری شمسی (خورشیدی)</option>
+          <option value="g">میلادی (Gregorian)</option>
+          <option value="i">هجری قمری (اسلامی)</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>به تقویم:</label>
+        <select id="c-to" class="inp" style="direction:rtl;text-align:right">
+          <option value="g">میلادی (Gregorian)</option>
+          <option value="i">هجری قمری (اسلامی)</option>
+          <option value="all">هر دو تقویم دیگر</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:8px">
+      <div class="fg"><label>روز:</label><input type="number" id="d-in" class="inp" value="1" min="1" max="31"></div>
+      <div class="fg">
+        <label>ماه:</label>
+        <select id="m-in" class="inp" style="direction:rtl;text-align:right">
+          <option value="1">1 - فروردین</option><option value="2">2 - اردیبهشت</option><option value="3">3 - خرداد</option>
+          <option value="4">4 - تیر</option><option value="5">5 - مرداد</option><option value="6">6 - شهریور</option>
+          <option value="7">7 - مهر</option><option value="8">8 - آبان</option><option value="9">9 - آذر</option>
+          <option value="10">10 - دی</option><option value="11">11 - بهمن</option><option value="12">12 - اسفند</option>
+        </select>
+      </div>
+      <div class="fg"><label>سال:</label><input type="number" id="y-in" class="inp" value="1404"></div>
+    </div>
+    <button class="btn" onclick="doConv()">🔄 تبدیل دقیق تاریخ</button>
+    <div id="res" class="res"></div>
+  </div>
+  <div class="box seo">
+    <h2>تبدیل آنلاین تاریخ شمسی به میلادی و قمری (و بالعکس)</h2>
+    <p>در ابزار تبدیل تاریخ چرتکه می‌توانید نوع تقویم مبدا و مقصد را انتخاب کرده و تاریخ‌های شمسی، میلادی و قمری را به صورت دوطرفه و با احتساب سال‌های کبیسه به یکدیگر تبدیل نمایید.</p>
+  </div>
+</main>
+<script src="app.js" crossorigin="anonymous"></script>
+<script>
+const CAL = { j: "هجری شمسی (خورشیدی)", g: "میلادی (Gregorian)", i: "هجری قمری (اسلامی)" };
+const MN = {
+  j: ["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"],
+  g: ["ژانویه (Jan)","فوریه (Feb)","مارس (Mar)","آوریل (Apr)","مه (May)","ژوئن (Jun)","ژوئیه (Jul)","اوت (Aug)","سپتامبر (Sep)","اکتبر (Oct)","نوامبر (Nov)","دسامبر (Dec)"],
+  i: ["محرم","صفر","ربیع‌الاول","ربیع‌الثانی","جمادی‌الاول","جمادی‌الثانی","رجب","شعبان","رمضان","شوال","ذی‌قعده","ذی‌حجه"]
+};
+const WK = ["دوشنبه","سه‌شنبه","چهارشنبه","پنج‌شنبه","جمعه","شنبه","یک‌شنبه"];
+
+function upM(){
+  let c = document.getElementById("c-fr").value;
+  let toSel = document.getElementById("c-to"), prevTo = toSel.value;
+  let opts = Object.keys(CAL).filter(k => k !== c).map(k => `<option value="${k}">${CAL[k]}</option>`).join("");
+  opts += `<option value="all">هر دو تقویم دیگر</option>`;
+  toSel.innerHTML = opts;
+  if(prevTo && prevTo !== c) toSel.value = prevTo;
+  document.getElementById("m-in").innerHTML = MN[c].map((x,k)=>`<option value="${k+1}">${k+1} - ${x}</option>`).join("");
+  document.getElementById("y-in").value = c==="j" ? 1404 : c==="g" ? 2025 : 1446;
+}
+
+function g2j(gy,gm,gd){
+  let d_m=[0,31,59,90,120,151,181,212,243,273,304,334], gy2=(gm>2)?(gy+1):gy;
+  let days=355666+(365*gy)+~~((gy2+3)/4)-~~((gy2+99)/100)+~~((gy2+399)/400)+gd+d_m[gm-1];
+  let jy=-1595+(33*~~(days/12053)); days%=12053; jy+=4*~~(days/1461); days%=1461;
+  if(days>365){jy+=~~((days-1)/365); days=(days-1)%365;}
+  return [jy, (days<186)?1+~~(days/31):7+~~((days-186)/30), 1+((days<186)?(days%31):((days-186)%30))];
+}
+
+function j2g(jy,jm,jd){
+  jy+=1595; let days=-355668+(365*jy)+(~~(jy/33)*8)+~~(((jy%33)+3)/4)+jd+(jm<7?(jm-1)*31:((jm-7)*30)+186);
+  let gy=400*~~(days/146097); days%=146097;
+  if(days>36524){gy+=100*~~(--days/36524); days%=36524; if(days>=365)days++;}
+  gy+=4*~~(days/1461); days%=1461; if(days>365){gy+=~~((days-1)/365); days=(days-1)%365;}
+  let gd=days+1, sal=[0,31,((gy%4===0&&gy%100!==0)||(gy%400===0))?29:28,31,30,31,30,31,31,30,31,30,31], gm=0;
+  while(gm<13 && gd>sal[gm]) gd-=sal[gm++];
+  return [gy,gm,gd];
+}
+
+function g2jdn(y,m,d){
+  let a=~~((14-m)/12), y2=y+4800-a, m2=m+12*a-3;
+  return d+~~((153*m2+2)/5)+365*y2+~~(y2/4)-~~(y2/100)+~~(y2/400)-32045;
+}
+function jdn2g(jdn){
+  let a=jdn+32044, b=~~((4*a+3)/146097), c=a-~~((146097*b)/4), d=~~((4*c+3)/1461), e=c-~~((1461*d)/4), m=~~((5*e+2)/153);
+  return [100*b+d-4800+~~(m/10), m+3-12*~~(m/10), e-~~((153*m+2)/5)+1];
+}
+function i2jdn(y,m,d){ return d+Math.ceil(29.5*(m-1))+(y-1)*354+~~((3+11*y)/30)+1948439; }
+function jdn2i(jdn){
+  let y=~~((30*(jdn-1948439)+10646)/10631), m=Math.min(12,Math.ceil((jdn-(29+i2jdn(y,1,1)))/29.5)+1);
+  return [y, m, jdn-i2jdn(y,m,1)+1];
+}
+
+let nw=new Date(), [ty,tm,td]=g2j(nw.getFullYear(),nw.getMonth()+1,nw.getDate());
+document.getElementById("td-b").innerText=`امروز: ${td} ${MN.j[tm-1]} ${ty} شمسی | ${nw.getFullYear()}/${nw.getMonth()+1}/${nw.getDate()} میلادی`;
+
+function doConv(){
+  let fr=document.getElementById("c-fr").value, to=document.getElementById("c-to").value;
+  let d=+document.getElementById("d-in").value, m=+document.getElementById("m-in").value, y=+document.getElementById("y-in").value;
+  if(!y || d<1 || d>31) return alert("لطفاً تاریخ معتبر وارد کنید");
+  let gy,gm,gd, jdn;
+  if(fr==="g"){ [gy,gm,gd]=[y,m,d]; jdn=g2jdn(gy,gm,gd); }
+  else if(fr==="j"){ [gy,gm,gd]=j2g(y,m,d); jdn=g2jdn(gy,gm,gd); }
+  else { jdn=i2jdn(y,m,d); [gy,gm,gd]=jdn2g(jdn); }
+  let [jy,jm,jd]=g2j(gy,gm,gd), [iy,im,id]=jdn2i(jdn);
+  let h=`<div class="r-row"><span>روز هفته:</span><b>${WK[jdn%7]}</b></div>`;
+  if((to==="all"||to==="j") && fr!=="j") h+=`<div class="r-row"><span>هجری شمسی:</span><b>${jd} ${MN.j[jm-1]} ${jy} (${jy}/${jm}/${jd})</b></div>`;
+  if((to==="all"||to==="g") && fr!=="g") h+=`<div class="r-row"><span>میلادی:</span><b>${gd} ${MN.g[gm-1]} ${gy} (${gy}/${gm}/${gd})</b></div>`;
+  if((to==="all"||to==="i") && fr!=="i") h+=`<div class="r-row"><span>هجری قمری:</span><b>${id} ${MN.i[im-1]} ${iy} (${iy}/${im}/${id})</b></div>`;
+  let bx=document.getElementById("res"); bx.innerHTML=h; bx.classList.add("on");
+}
+</script>
+</body>
+</html>

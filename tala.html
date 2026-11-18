@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه آنلاین قیمت طلا (نو و دست دوم) | چرتکه</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>🪙 محاسبه قیمت طلا و جواهر</h1>
+    <p>محاسبه دقیق طلای نو (با اجرت و مالیات جدید) و طلای دست دوم</p>
+  </div>
+  <div class="box">
+    <div class="fg">
+      <label>قیمت روز هر گرم طلای ۱۸ عیار (تومان):</label>
+      <input type="text" id="g-pr" class="inp money" placeholder="مثلاً 4,500,000" inputmode="numeric">
+      <div class="w-out"></div>
+    </div>
+    <div class="fg">
+      <label>وزن طلا (گرم):</label>
+      <input type="number" id="g-wt" class="inp" step="0.01" placeholder="مثلاً 5.4">
+    </div>
+    <div class="fg">
+      <label>اجرت ساخت به درصد (برای طلای دست دوم 0 بگذارید):</label>
+      <input type="number" id="g-oj" class="inp" value="12" step="0.5">
+    </div>
+    <div class="fg">
+      <label>سود طلافروش (معمولاً ۷ درصد):</label>
+      <input type="number" id="g-pf" class="inp" value="7" step="0.5">
+    </div>
+    <div class="fg">
+      <label>مالیات بر ارزش افزوده (۱۰ درصد روی سود و اجرت):</label>
+      <input type="number" id="g-tx" class="inp" value="10" step="0.5">
+    </div>
+    <button class="btn" onclick="calcTala()">🧮 محاسبه فاکتور طلا</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>ارزش طلای خام:</span><b id="t-raw">0</b></div>
+      <div class="r-row"><span>مبلغ اجرت ساخت:</span><b id="t-oj">0</b></div>
+      <div class="r-row"><span>سود فروشنده:</span><b id="t-pf">0</b></div>
+      <div class="r-row"><span>مالیات (فقط بر سود و اجرت):</span><b id="t-tx">0</b></div>
+      <div class="r-row"><span>قیمت نهایی قابل پرداخت:</span><b id="t-fin">0</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>فرمول جدید محاسبه قیمت طلا در طلافروشی</h2>
+    <p>طبق قانون جدید مالیات بر ارزش افزوده طلا، اصل طلای خام معاف از مالیات است و مالیات ۱۰ درصدی صرفاً از مجموع «اجرت ساخت + سود طلافروش» دریافت می‌شود. برای محاسبه طلای بدون اجرت (دست دوم)، کافی است درصد اجرت را صفر وارد کنید.</p>
+  </div>
+</main>
+<script src="app.js" crossorigin="anonymous"></script>
+<script>
+function calcTala(){
+  let pr = val("g-pr"), wt = Number(document.getElementById("g-wt").value);
+  let ojP = Number(document.getElementById("g-oj").value), pfP = Number(document.getElementById("g-pf").value), txP = Number(document.getElementById("g-tx").value);
+  if(!pr || !wt) return alert("قیمت گرم طلا و وزن را وارد کنید");
+  let raw = pr * wt;
+  let oj = raw * (ojP / 100);
+  let pf = (raw + oj) * (pfP / 100);
+  let tx = (oj + pf) * (txP / 100);
+  let fin = raw + oj + pf + tx;
+  document.getElementById("t-raw").innerText = fmt(raw) + " تومان";
+  document.getElementById("t-oj").innerText = fmt(oj) + " تومان";
+  document.getElementById("t-pf").innerText = fmt(pf) + " تومان";
+  document.getElementById("t-tx").innerText = fmt(tx) + " تومان";
+  document.getElementById("t-fin").innerText = fmt(fin) + " تومان";
+  document.getElementById("res").classList.add("on");
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه آنلاین درصد، تخفیف کالا و درصد تست کنکور | چرتکه</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>📊 محاسبه درصد، تخفیف و کنکور</h1>
+    <p>محاسبه سریع قیمت پس از تخفیف و محاسبه درصد دروس آزمون با نمره منفی</p>
+  </div>
+  <div class="box">
+    <h3 style="font-size:15px;color:#1e3a8a;margin-bottom:10px">🛍️ ۱. محاسبه درصد تخفیف و سود</h3>
+    <div class="fg">
+      <label>مبلغ یا عدد اولیه (تومان):</label>
+      <input type="text" id="p-amt" class="inp money" placeholder="مثلاً 2,500,000" inputmode="numeric">
+      <div class="w-out"></div>
+    </div>
+    <div class="fg">
+      <label>میزان درصد (تخفیف یا افزایش):</label>
+      <input type="number" id="p-pct" class="inp" value="20">
+    </div>
+    <button class="btn" onclick="calcPct()">🧮 محاسبه درصد و تخفیف</button>
+    <div id="res1" class="res">
+      <div class="r-row"><span>مقدار درصد (مبلغ تخفیف):</span><b id="r-dis">0</b></div>
+      <div class="r-row"><span>مبلغ پس از کسر تخفیف:</span><b id="r-min">0</b></div>
+      <div class="r-row"><span>مبلغ پس از افزایش درصد:</span><b id="r-add">0</b></div>
+    </div>
+  </div>
+
+  <div class="box">
+    <h3 style="font-size:15px;color:#1e3a8a;margin-bottom:10px">📝 ۲. محاسبه درصد تست کنکور (با نمره منفی)</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+      <div class="fg"><label>کل سوالات:</label><input type="number" id="k-tot" class="inp" value="30"></div>
+      <div class="fg"><label>تعداد درست:</label><input type="number" id="k-tr" class="inp" value="18"></div>
+      <div class="fg"><label>تعداد غلط:</label><input type="number" id="k-fl" class="inp" value="3"></div>
+    </div>
+    <button class="btn" onclick="calcKon()">🧮 محاسبه درصد آزمون</button>
+    <div id="res2" class="res">
+      <div class="r-row"><span>درصد نهایی (با نمره منفی):</span><b id="k-neg">0%</b></div>
+      <div class="r-row"><span>درصد بدون نمره منفی:</span><b id="k-raw">0%</b></div>
+      <div class="r-row"><span>تعداد نزده:</span><b id="k-emp">0</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>فرمول محاسبه درصد کنکور و تخفیف</h2>
+    <p>در آزمون‌های چهارگزینه‌ای هر ۳ پاسخ غلط یک پاسخ صحیح را خنثی می‌کند؛ بنابراین فرمول برابر است با: ((تعداد درست × ۳) منهای تعداد غلط) تقسیم بر (کل سوالات × ۳) ضربدر ۱۰۰.</p>
+  </div>
+</main>
+<script src="app.js" crossorigin="anonymous"></script>
+<script>
+function calcPct(){
+  let a = val("p-amt"), p = +document.getElementById("p-pct").value;
+  if(!a) return alert("مبلغ را وارد کنید");
+  let d = a * (p / 100);
+  document.getElementById("r-dis").innerText = fmt(d) + " تومان";
+  document.getElementById("r-min").innerText = fmt(a - d) + " تومان";
+  document.getElementById("r-add").innerText = fmt(a + d) + " تومان";
+  document.getElementById("res1").classList.add("on");
+}
+function calcKon(){
+  let t = +document.getElementById("k-tot").value, tr = +document.getElementById("k-tr").value, fl = +document.getElementById("k-fl").value;
+  if(!t || tr + fl > t) return alert("مجموع درست و غلط نمی‌تواند بیشتر از کل سوالات باشد!");
+  let neg = (((tr * 3) - fl) / (t * 3)) * 100;
+  let raw = (tr / t) * 100;
+  document.getElementById("k-neg").innerText = neg.toFixed(1) + " ٪";
+  document.getElementById("k-raw").innerText = raw.toFixed(1) + " ٪";
+  document.getElementById("k-emp").innerText = fmt(t - tr - fl) + " سوال";
+  document.getElementById("res2").classList.add("on");
+}
+</script>
+</body>
+</html>

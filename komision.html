@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه آنلاین کمیسیون املاک (خرید و فروش ملک) | چرتکه</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>🤝 محاسبه کمیسیون خرید و فروش ملک</h1>
+    <p>محاسبه دقیق حق‌الزحمه مشاور املاک و مالیات بر ارزش افزوده سهم خریدار و فروشنده</p>
+  </div>
+  <div class="box">
+    <div class="fg">
+      <label>مبلغ کل معامله (قیمت ملک به تومان):</label>
+      <input type="text" id="k-pr" class="inp money" placeholder="مثلاً 5,000,000,000" inputmode="numeric">
+      <div class="w-out"></div>
+    </div>
+    <div class="fg">
+      <label>نرخ تعرفه کمیسیون هر طرف (درصد - معمولاً 0.25 یا 0.5):</label>
+      <input type="number" id="k-rt" class="inp" value="0.25" step="0.05">
+    </div>
+    <button class="btn" onclick="calcKom()">🧮 محاسبه حق کمیسیون</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>کمیسیون خالص هر طرف (خریدار یا فروشنده):</span><b id="c-bs">0</b></div>
+      <div class="r-row"><span>مالیات بر ارزش افزوده (۱۰ درصد):</span><b id="c-tx">0</b></div>
+      <div class="r-row"><span>مبلغ نهایی قابل پرداخت توسط خریدار:</span><b id="c-by">0</b></div>
+      <div class="r-row"><span>مبلغ نهایی قابل پرداخت توسط فروشنده:</span><b id="c-sl">0</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>فرمول محاسبه کمیسیون خرید و فروش مسکن</h2>
+    <p>حق کمیسیون مشاور املاک در معاملات خرید و فروش بر اساس درصدی از ارزش کل معامله (بین ۰.۲۵ تا ۰.۵ درصد از هر طرف طبق تعرفه شهر) به علاوه ۱۰ درصد مالیات بر ارزش افزوده محاسبه می‌شود.</p>
+  </div>
+</main>
+<script src="app.js" crossorigin="anonymous"></script>
+<script>
+function calcKom(){
+  let p = val("k-pr"), r = +document.getElementById("k-rt").value;
+  if(!p) return alert("لطفاً مبلغ کل معامله را وارد کنید");
+  let bs = p * (r / 100);
+  let tx = bs * 0.10;
+  let fin = bs + tx;
+  document.getElementById("c-bs").innerText = fmt(bs) + " تومان";
+  document.getElementById("c-tx").innerText = fmt(tx) + " تومان";
+  document.getElementById("c-by").innerText = fmt(fin) + " تومان";
+  document.getElementById("c-sl").innerText = fmt(fin) + " تومان";
+  document.getElementById("res").classList.add("on");
+}
+</script>
+</body>
+</html>

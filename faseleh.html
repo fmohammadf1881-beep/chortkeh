@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه فاصله بین دو تاریخ شمسی آنلاین | چرتکه</title>
+<link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>⏳ محاسبه فاصله دقیق بین دو تاریخ</h1>
+    <p>محاسبه تعداد سال، ماه، هفته، روز و ساعت بین دو تاریخ هجری شمسی</p>
+  </div>
+  <div class="box">
+    <h3 style="font-size:14px;color:var(--pr);margin-bottom:8px">🔹 تاریخ اول (شروع):</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+      <div class="fg"><label>روز:</label><input type="number" id="d1" class="inp" value="1" min="1" max="31"></div>
+      <div class="fg"><label>ماه:</label><input type="number" id="m1" class="inp" value="1" min="1" max="12"></div>
+      <div class="fg"><label>سال:</label><input type="number" id="y1" class="inp" value="1400"></div>
+    </div>
+    <h3 style="font-size:14px;color:var(--pr);margin-bottom:8px">🔸 تاریخ دوم (پایان):</h3>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+      <div class="fg"><label>روز:</label><input type="number" id="d2" class="inp" value="1" min="1" max="31"></div>
+      <div class="fg"><label>ماه:</label><input type="number" id="m2" class="inp" value="1" min="1" max="12"></div>
+      <div class="fg"><label>سال:</label><input type="number" id="y2" class="inp" value="1404"></div>
+    </div>
+    <button class="btn" onclick="calcDiff()">🧮 محاسبه فاصله دو تاریخ</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>فاصله به سال و ماه و روز:</span><b id="f-ymd">-</b></div>
+      <div class="r-row"><span>مجموع کل روزها:</span><b id="f-dy">0</b></div>
+      <div class="r-row"><span>بر حسب هفته و روز:</span><b id="f-wk">-</b></div>
+      <div class="r-row"><span>مجموع کل ساعات:</span><b id="f-hr">0</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>محاسبه آنلاین اختلاف دو تاریخ خورشیدی</h2>
+    <p>این ابزار برای محاسبه سابقه کار، مدت زمان قرارداد، روزهای خدمت سربازی و فاصله دقیق بین دو رویداد با احتساب ماه‌های ۳۱ روزه و سال‌های کبیسه طراحی شده است.</p>
+  </div>
+</main>
+<script src="app.js?v=3" crossorigin="anonymous"></script>
+<script>
+function jDays(y,m,d){
+  let y2 = y + 1595;
+  return -355668 + (365*y2) + (~~(y2/33)*8) + ~~(((y2%33)+3)/4) + d + (m<7?(m-1)*31:((m-7)*30)+186);
+}
+function calcDiff(){
+  let d1=+document.getElementById("d1").value, m1=+document.getElementById("m1").value, y1=+document.getElementById("y1").value;
+  let d2=+document.getElementById("d2").value, m2=+document.getElementById("m2").value, y2=+document.getElementById("y2").value;
+  let tot = Math.abs(jDays(y2,m2,d2) - jDays(y1,m1,d1));
+  let yr = Math.floor(tot / 365.2425);
+  let rem = Math.round(tot - yr * 365.2425);
+  let mt = Math.floor(rem / 30.4375);
+  let dy = Math.round(rem % 30.4375);
+  document.getElementById("f-ymd").innerText = `${fmt(yr)} سال و ${fmt(mt)} ماه و ${fmt(dy)} روز`;
+  document.getElementById("f-dy").innerText = fmt(tot) + " روز";
+  document.getElementById("f-wk").innerText = `${fmt(Math.floor(tot/7))} هفته و ${fmt(tot%7)} روز`;
+  document.getElementById("f-hr").innerText = fmt(tot * 24) + " ساعت";
+  document.getElementById("res").classList.add("on");
+}
+</script>
+</body>
+</html>

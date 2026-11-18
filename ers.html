@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه آنلاین سهم‌الارث و تقسیم ارث اسلامی | چرتکه</title>
+<link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>⚖️ محاسبه آنلاین سهم‌الارث</h1>
+    <p>تقسیم دقیق ماترک و میراث بین وراث (همسر، فرزندان، پدر و مادر) طبق قانون مدنی</p>
+  </div>
+  <div class="box">
+    <div class="fg">
+      <label>ارزش کل دارایی و اموال متوفی (تومان):</label>
+      <input type="text" id="e-amt" class="inp money" placeholder="مثلاً 6,000,000,000" inputmode="numeric">
+      <div class="w-out"></div>
+    </div>
+    <div class="fg">
+      <label>وضعیت همسر متوفی:</label>
+      <select id="e-sp" class="inp" style="direction:rtl;text-align:right">
+        <option value="w">دارای همسر دائم (زوجه / زن)</option>
+        <option value="h">دارای همسر دائم (زوج / شوهر)</option>
+        <option value="n">فاقد همسر در قید حیات</option>
+      </select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="fg"><label>تعداد پسران:</label><input type="number" id="e-sn" class="inp" value="1" min="0"></div>
+      <div class="fg"><label>تعداد دختران:</label><input type="number" id="e-dt" class="inp" value="1" min="0"></div>
+    </div>
+    <div style="display:flex;gap:16px;margin:8px 0;font-size:13px">
+      <label><input type="checkbox" id="e-fa" checked> پدر در قید حیات است</label>
+      <label><input type="checkbox" id="e-mo" checked> مادر در قید حیات است</label>
+    </div>
+    <button class="btn" onclick="calcErs()">🧮 محاسبه دقیق سهم هر وارث</button>
+    <div id="res" class="res"><div id="e-rows"></div></div>
+  </div>
+  <div class="box seo">
+    <h2>قوانین تقسیم ارث طبقه اول در ایران</h2>
+    <p>در صورت وجود فرزند برای متوفی، سهم همسر (زن) یک‌هشتم، سهم شوهر یک‌چهارم، و سهم هر یک از پدر و مادر یک‌ششم از کل ترکه است. الباقی ماترک به نسبت دو به یک (پسر دو برابر دختر) بین فرزندان تقسیم می‌شود.</p>
+  </div>
+</main>
+<script src="app.js?v=3" crossorigin="anonymous"></script>
+<script>
+function calcErs(){
+  let tot = val("e-amt"), sp = document.getElementById("e-sp").value;
+  let sn = +document.getElementById("e-sn").value, dt = +document.getElementById("e-dt").value;
+  let fa = document.getElementById("e-fa").checked, mo = document.getElementById("e-mo").checked;
+  if(!tot) return alert("لطفاً ارزش کل دارایی را وارد کنید");
+  let hasCh = (sn + dt) > 0;
+  let spS = sp==="w" ? (hasCh ? 1/8 : 1/4) : sp==="h" ? (hasCh ? 1/4 : 1/2) : 0;
+  let faS = fa ? (hasCh ? 1/6 : 0) : 0;
+  let moS = mo ? (hasCh ? 1/6 : 1/3) : 0;
+  let rem = Math.max(0, 1 - (spS + faS + moS));
+  if(!hasCh && (fa || mo)){
+    if(fa) faS += rem; else moS += rem;
+    rem = 0;
+  }
+  let units = sn * 2 + dt;
+  let uVal = units > 0 ? rem / units : 0;
+  let h = "";
+  const row = (t, sh) => `<div class="r-row"><span>${t} (${(sh*100).toFixed(1)}٪):</span><b>${fmt(tot*sh)} تومان</b></div>`;
+  if(sp!=="n") h += row("سهم همسر", spS);
+  if(fa) h += row("سهم پدر", faS);
+  if(mo) h += row("سهم مادر", moS);
+  if(sn>0) h += row(`سهم هر پسر (از ${sn} پسر)`, uVal*2);
+  if(dt>0) h += row(`سهم هر دختر (از ${dt} دختر)`, uVal);
+  document.getElementById("e-rows").innerHTML = h || "وارثی انتخاب نشده است!";
+  document.getElementById("res").classList.add("on");
+}
+</script>
+</body>
+</html>

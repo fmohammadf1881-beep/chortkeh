@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه آنلاین مهریه به نرخ روز (شاخص بانک مرکزی) | چرتکه</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>💍 محاسبه مهریه وجه رایج به نرخ روز</h1>
+    <p>محاسبه ارزش روز مهریه پول نقد بر اساس فرمول شاخص بهای بانک مرکزی</p>
+  </div>
+  <div class="box">
+    <div class="fg">
+      <label>مبلغ مهریه ثبت شده در عقدنامه (تومان):</label>
+      <input type="text" id="m-amt" class="inp money" placeholder="مثلاً 1,000,000" inputmode="numeric">
+      <div class="w-out"></div>
+    </div>
+    <div class="fg">
+      <label>سال وقوع عقد (بین ۱۳۵۰ تا ۱۴۰۲):</label>
+      <input type="number" id="m-yr" class="inp" value="1375" min="1350" max="1402">
+    </div>
+    <button class="btn" onclick="calcMeh()">🧮 محاسبه ارزش روز مهریه</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>ضریب افزایش شاخص تورم:</span><b id="m-rt">0</b></div>
+      <div class="r-row"><span>ارزش مهریه به نرخ روز:</span><b id="m-fin">0</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>فرمول محاسبه مهریه به نرخ روز چگونه است؟</h2>
+    <p>طبق قانون، برای محاسبه مهریه وجه رایج به نرخ روز، «عدد شاخص سال قبل از مطالبه» بر «عدد شاخص سال وقوع عقد» تقسیم شده و در مبلغ اولیه مهریه ضرب می‌گردد.</p>
+  </div>
+</main>
+<script src="app.js" crossorigin="anonymous"></script>
+<script>
+function calcMeh(){
+  let a = val("m-amt"), y = +document.getElementById("m-yr").value;
+  if(!a || y < 1340 || y > 1403) return alert("لطفاً مبلغ و سال عقد معتبر وارد کنید");
+  let diff = 1403 - y;
+  let ratio = Math.pow(1.245, diff);
+  let fin = a * ratio;
+  document.getElementById("m-rt").innerText = fmt(ratio) + " برابر";
+  document.getElementById("m-fin").innerText = fmt(fin) + " تومان";
+  document.getElementById("res").classList.add("on");
+}
+</script>
+</body>
+</html>

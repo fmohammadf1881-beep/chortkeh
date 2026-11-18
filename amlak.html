@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تبدیل آنلاین رهن و اجاره مسکن | چرتکه</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>🏠 تبدیل رهن و اجاره ملک</h1>
+    <p>تبدیل دقیق ودیعه (رهن) به اجاره ماهانه و بالعکس طبق نرخ عرف بازار</p>
+  </div>
+  <div class="box">
+    <div class="fg">
+      <label>مبلغ رهن (ودیعه) فعلی صاحب‌خانه (تومان):</label>
+      <input type="text" id="r-cur" class="inp money" placeholder="مثلاً 300,000,000" inputmode="numeric">
+      <div class="w-out"></div>
+    </div>
+    <div class="fg">
+      <label>مبلغ اجاره ماهانه فعلی (تومان):</label>
+      <input type="text" id="e-cur" class="inp money" placeholder="مثلاً 9,000,000" inputmode="numeric">
+      <div class="w-out"></div>
+    </div>
+    <div class="fg">
+      <label>مبلغ رهن پیشنهادی شما چقدر است؟ (تومان):</label>
+      <input type="text" id="r-new" class="inp money" placeholder="مثلاً 200,000,000" inputmode="numeric">
+      <div class="w-out"></div>
+    </div>
+    <div class="fg">
+      <label>نرخ تبدیل (به ازای هر ۱ میلیون رهن چند تومان اجاره؟ عرف = 30,000):</label>
+      <input type="number" id="rate" class="inp" value="30000">
+    </div>
+    <button class="btn" onclick="calcAmlak()">🧮 محاسبه تبدیل رهن و اجاره</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>اجاره ماهانه جدید با رهن پیشنهادی شما:</span><b id="a-nej">0</b></div>
+      <div class="r-row"><span>معادل «رهن کامل» این ملک (اجاره صفر):</span><b id="a-fr">0</b></div>
+      <div class="r-row"><span>معادل «اجاره کامل» این ملک (رهن صفر):</span><b id="a-fe">0</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>فرمول تبدیل رهن به اجاره در مشاور املاک</h2>
+    <p>در بازار املاک ایران به صورت عرفی به ازای هر ۱ میلیون تومان ودیعه (رهن)، مبلغ ۳۰ هزار تومان اجاره ماهانه (معادل ۳۶ درصد سالانه) محاسبه می‌شود.</p>
+  </div>
+</main>
+<script src="app.js" crossorigin="anonymous"></script>
+<script>
+function calcAmlak(){
+  let r1 = val("r-cur"), e1 = val("e-cur"), r2 = val("r-new"), rt = +document.getElementById("rate").value || 30000;
+  if(!r1 && !e1) return alert("لطفاً مبلغ رهن یا اجاره فعلی را وارد کنید");
+  let fullRahn = r1 + (e1 / rt) * 1000000;
+  let fullEjare = (fullRahn / 1000000) * rt;
+  let newEjare = ((fullRahn - r2) / 1000000) * rt;
+  document.getElementById("a-nej").innerText = newEjare >= 0 ? fmt(newEjare) + " تومان" : "رهن پیشنهادی بیش از رهن کامل است!";
+  document.getElementById("a-fr").innerText = fmt(fullRahn) + " تومان";
+  document.getElementById("a-fe").innerText = fmt(fullEjare) + " تومان";
+  document.getElementById("res").classList.add("on");
+}
+</script>
+</body>
+</html>

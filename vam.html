@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه اقساط و سود وام بانکی آنلاین | چرتکه</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>🏦 محاسبه اقساط و سود وام بانکی</h1>
+    <p>محاسبه دقیق قسط ماهانه و کل سود وام بر اساس فرمول رسمی بانک مرکزی</p>
+  </div>
+  <div class="box">
+    <div class="fg">
+      <label>مبلغ وام (تومان):</label>
+      <input type="text" id="amt" class="inp money" placeholder="مثلاً 100,000,000" inputmode="numeric">
+      <div class="w-out"></div>
+    </div>
+    <div class="fg">
+      <label>نرخ سود سالانه (درصد):</label>
+      <input type="number" id="rate" class="inp" value="23" step="0.5">
+    </div>
+    <div class="fg">
+      <label>مدت بازپرداخت (تعداد ماه):</label>
+      <input type="number" id="mth" class="inp" value="36" placeholder="مثلاً 36 ماه">
+    </div>
+    <button class="btn" onclick="calcVam()">🧮 محاسبه دقیق اقساط</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>مبلغ هر قسط ماهانه:</span><b id="r-pmt">0</b></div>
+      <div class="r-row"><span>کل سود وام:</span><b id="r-int">0</b></div>
+      <div class="r-row"><span>مجموع کل بازپرداخت:</span><b id="r-tot">0</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>فرمول محاسبه اقساط وام بانکی چگونه است؟</h2>
+    <p>در سیستم بانکی ایران، محاسبه قسط وام به روش فرمول جدید (سود مرکب) انجام می‌شود. در این روش با توجه به مبلغ اصل وام، نرخ سود مصوب (مثلاً ۲۳ درصد یا ۴ درصد قرض‌الحسنه) و تعداد ماه‌های بازپرداخت، سهم اصل و سود در هر ماه محاسبه می‌گردد.</p>
+  </div>
+</main>
+<script src="app.js" crossorigin="anonymous"></script>
+<script>
+function calcVam(){
+  let P = val("amt"), R = Number(document.getElementById("rate").value), N = Number(document.getElementById("mth").value);
+  if(!P || !N) return alert("لطفاً مبلغ وام و تعداد ماه را وارد کنید");
+  let pmt = 0, r = (R / 100) / 12;
+  if(R === 0) pmt = P / N;
+  else pmt = P * (r * Math.pow(1 + r, N)) / (Math.pow(1 + r, N) - 1);
+  let tot = pmt * N, intr = tot - P;
+  document.getElementById("r-pmt").innerText = fmt(pmt) + " تومان";
+  document.getElementById("r-int").innerText = fmt(intr) + " تومان";
+  document.getElementById("r-tot").innerText = fmt(tot) + " تومان";
+  document.getElementById("res").classList.add("on");
+}
+</script>
+</body>
+</html>

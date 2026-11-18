@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه آنلاین BMI (شاخص توده بدنی و وزن ایده‌آل) | چرتکه</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>⚖️ محاسبه BMI و وزن ایده‌آل</h1>
+    <p>بررسی وضعیت تناسب اندام، کمبود یا اضافه وزن بر اساس استاندارد جهانی</p>
+  </div>
+  <div class="box">
+    <div class="fg">
+      <label>قد شما (به سانتی‌متر):</label>
+      <input type="number" id="b-h" class="inp" placeholder="مثلاً 175">
+    </div>
+    <div class="fg">
+      <label>وزن شما (به کیلوگرم):</label>
+      <input type="number" id="b-w" class="inp" placeholder="مثلاً 72">
+    </div>
+    <button class="btn" onclick="calcBMI()">🧮 محاسبه وضعیت بدنی</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>شاخص توده بدنی (BMI):</span><b id="b-sc">0</b></div>
+      <div class="r-row"><span>وضعیت فعلی شما:</span><b id="b-st">-</b></div>
+      <div class="r-row"><span>محدوده وزن ایده‌آل و سالم برای قد شما:</span><b id="b-id">-</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>شاخص توده بدنی (BMI) چیست؟</h2>
+    <p>عدد BMI از تقسیم وزن (کیلوگرم) بر مجذور قد (به متر) حاصل می‌شود. عدد بین ۱۸.۵ تا ۲۴.۹ نشان‌دهنده وزن کاملاً نرمال و ایده‌آل است.</p>
+  </div>
+</main>
+<script src="app.js" crossorigin="anonymous"></script>
+<script>
+function calcBMI(){
+  let h = Number(document.getElementById("b-h").value) / 100, w = Number(document.getElementById("b-w").value);
+  if(!h || !w) return alert("لطفاً قد و وزن را وارد کنید");
+  let bmi = (w / (h * h)).toFixed(1);
+  let st = bmi < 18.5 ? "کمبود وزن 🔵" : bmi < 25 ? "وزن نرمال و عالی 🟢" : bmi < 30 ? "اضافه وزن 🟠" : "چاقی 🔴";
+  let minW = Math.round(18.5 * h * h), maxW = Math.round(24.9 * h * h);
+  document.getElementById("b-sc").innerText = bmi;
+  document.getElementById("b-st").innerText = st;
+  document.getElementById("b-id").innerText = minW + " تا " + maxW + " کیلوگرم";
+  document.getElementById("res").classList.add("on");
+}
+</script>
+</body>
+</html>

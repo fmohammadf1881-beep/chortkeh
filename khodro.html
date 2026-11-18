@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head><!-- Injected code, this is not present in original code --><meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <script class="ndk4h64o">window.__consoleWorkerScript = "/ndk4h64o_console_worker.js";</script>
+    <script class="ndk4h64o" src="/ndk4h64o_console.js" crossorigin="anonymous"></script>
+    <script class="ndk4h64o">
+      if(window.eruda){
+        eruda.init({
+          theme: 'dark'
+        });
+
+        eruda._shadowRoot.querySelector('.eruda-entry-btn').style.display = 'none';
+
+        sessionStorage.setItem('__console_available', true);
+        document.addEventListener('showconsole', function () {eruda.show()});
+        document.addEventListener('hideconsole', function () {eruda.hide()});
+      }else if(document.querySelector('c-toggler')){
+        document.querySelector('c-toggler').style.display = 'none';
+      }
+      setTimeout(function(){
+        var scripts = document.querySelectorAll('.ndk4h64o');
+        scripts.forEach(function(el){document.head.removeChild(el)});
+      }, 0);
+    </script><!-- Injected code, this is not present in original code -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه افت قیمت خودرو تصادفی و رنگ دار | چرتکه</title>
+<link rel="stylesheet" href="style.css?v=3">
+</head>
+<body>
+<main>
+  <div class="box">
+    <h1 style="font-size:17px;color:var(--pr);margin-bottom:14px">🚗 محاسبه افت قیمت خودرو</h1>
+    <div class="fg">
+      <label>قیمت روز خودروی بی‌رنگ و سالم (تومان)</label>
+      <input type="text" id="p" class="inp money" value="800,000,000" inputmode="numeric">
+    </div>
+    <div class="fg" style="display:flex;gap:8px">
+      <div style="flex:1"><label>تعداد قطعات رنگ‌شده</label><input type="number" id="c" class="inp" value="1" min="0"></div>
+      <div style="flex:1"><label>تعداد قطعات تعویضی</label><input type="number" id="t" class="inp" value="0" min="0"></div>
+    </div>
+    <div class="fg">
+      <label>وضعیت سقف، ستون و شاسی‌ها</label>
+      <select id="sh" class="inp" style="direction:rtl;text-align:right">
+        <option value="0">کاملاً سالم و پلمپ</option>
+        <option value="8">خوردگی جزئی یک شاسی (۸٪ افت)</option>
+        <option value="15">ضربه شدید شاسی یا ستون (۱۵٪ افت)</option>
+        <option value="22">رنگ یا تعویض سقف / تمام رنگ (۲۲٪ افت)</option>
+      </select>
+    </div>
+    <button class="btn" onclick="calc()">محاسبه افت قیمت</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>درصد کل افت قیمت:</span><b id="r1">0</b></div>
+      <div class="r-row"><span>مبلغ افت قیمت خودرو:</span><b id="r2">0</b></div>
+      <div class="r-row"><span>قیمت منصفانه خودرو:</span><b id="r3">0</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>فرمول عرف بازار برای افت قیمت خودرو</h2>
+    <p>در عرف کارشناسی خودرو ایران، هر قطعه رنگ‌شدگی (گلگیر یا درب) حدود ۳٪ تا ۴٪ و هر قطعه تعویضی حدود ۴٪ تا ۵٪ باعث افت قیمت خودرو می‌شود. آسیب به شاسی و سقف بیشترین افت را ایجاد می‌کند.</p>
+  </div>
+</main>
+<script src="app.js?v=3" crossorigin="anonymous"></script>
+<script>
+function calc(){
+  let p=val('p'),c=parseInt(document.getElementById('c').value)||0;
+  let t=parseInt(document.getElementById('t').value)||0,sh=parseFloat(document.getElementById('sh').value)||0;
+  if(!p)return;
+  let pct=Math.min((c*3.5)+(t*4.5)+sh, 45);
+  let drop=p*(pct/100);
+  document.getElementById('r1').innerText=pct.toFixed(1)+' درصد';
+  document.getElementById('r2').innerText=fmt(drop)+' تومان';
+  document.getElementById('r3').innerText=fmt(p-drop)+' تومان';
+  document.getElementById('res').classList.add('on');
+}
+</script>
+</body>
+</html>
