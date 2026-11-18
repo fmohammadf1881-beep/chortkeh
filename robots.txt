@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://fmohammadf1881-beep.github.io/chortkeh/sitemap.xml
