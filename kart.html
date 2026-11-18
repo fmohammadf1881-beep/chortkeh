@@ -3,71 +3,113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>تشخیص نام بانک از شماره کارت و بررسی صحت شبا | چرتکه</title>
+<title>تبدیل شماره شبا به شماره حساب و تشخیص بانک کارت | چرتکه</title>
 <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 <main>
   <div class="box">
-    <h1 style="font-size:17px;color:var(--pr);margin-bottom:14px">💳 تشخیص بانک و اعتبارسنجی کارت و شبا</h1>
+    <h1 style="font-size:17px;color:var(--pr);margin-bottom:14px">💳 تبدیل شبا و حساب + بررسی کارت بانکی</h1>
     <div class="fg">
-      <label>شماره کارت ۱۶ رقمی (یا ۶ رقم اول برای تشخیص بانک)</label>
-      <input type="text" id="c" class="inp" placeholder="603799..." maxlength="16" oninput="chkNum(this,16,'c-err')" inputmode="numeric">
-      <div id="c-err" style="color:#ef4444;font-size:11px;font-weight:700;margin-top:4px;display:none"></div>
+      <label>نوع عملیات را انتخاب کنید</label>
+      <select id="md" class="inp" style="direction:rtl;text-align:right;font-weight:700" onchange="chMd()">
+        <option value="sh2ac">🔄 تبدیل شماره شبا به شماره حساب + نام بانک</option>
+        <option value="ac2sh">🔄 تبدیل شماره حساب به شماره شبا (حساب متمرکز)</option>
+        <option value="card">💳 تشخیص بانک و بررسی صحت شماره کارت ۱۶ رقمی</option>
+      </select>
     </div>
-    <div class="fg">
+
+    <div id="bx-sh" class="fg">
       <label>شماره شبا (۲۴ رقم بعد از IR را وارد کنید)</label>
       <div style="display:flex;direction:ltr;align-items:stretch">
-        <span style="background:var(--pr);color:#fff;font-weight:900;padding:10px 14px;border-radius:10px 0 0 10px;display:flex;align-items:center;font-size:15px;letter-spacing:1px">IR</span>
-        <input type="text" id="sh" class="inp" placeholder="000000000000000000000000" maxlength="24" oninput="chkNum(this,24,'sh-err')" inputmode="numeric" style="border-radius:0 10px 10px 0;border-left:none">
+        <span style="background:var(--pr);color:#fff;font-weight:900;padding:10px 14px;border-radius:10px 0 0 10px;display:flex;align-items:center;font-size:15px">IR</span>
+        <input type="text" id="sh" class="inp" placeholder="000000000000000000000000" maxlength="24" oninput="chkN(this,24,'e1')" inputmode="numeric" style="border-radius:0 10px 10px 0;border-left:none">
       </div>
-      <div id="sh-err" style="color:#ef4444;font-size:11px;font-weight:700;margin-top:4px;display:none"></div>
+      <div id="e1" style="color:#ef4444;font-size:11px;font-weight:700;margin-top:4px;display:none"></div>
     </div>
-    <button class="btn" onclick="calc()">بررسی اعتبار کارت و شبا</button>
+
+    <div id="bx-ac" style="display:none">
+      <div class="fg">
+        <label>نام بانک را انتخاب کنید</label>
+        <select id="bnk" class="inp" style="direction:rtl;text-align:right"></select>
+      </div>
+      <div class="fg">
+        <label>شماره حساب (فقط اعداد بدون ممیز یا خط تیره)</label>
+        <input type="text" id="ac" class="inp" placeholder="مثلا: 1234567890" maxlength="18" oninput="chkN(this,18,'e2')" inputmode="numeric">
+        <div id="e2" style="color:#ef4444;font-size:11px;font-weight:700;margin-top:4px;display:none"></div>
+      </div>
+    </div>
+
+    <div id="bx-cd" class="fg" style="display:none">
+      <label>شماره کارت ۱۶ رقمی</label>
+      <input type="text" id="c" class="inp" placeholder="603799..." maxlength="16" oninput="chkN(this,16,'e3')" inputmode="numeric">
+      <div id="e3" style="color:#ef4444;font-size:11px;font-weight:700;margin-top:4px;display:none"></div>
+    </div>
+
+    <button class="btn" onclick="calc()">محاسبه و استخراج اطلاعات</button>
     <div id="res" class="res">
-      <div class="r-row"><span>نام بانک صادرکننده:</span><b id="r1">-</b></div>
-      <div class="r-row"><span>اعتبار شماره کارت:</span><b id="r2">-</b></div>
-      <div class="r-row"><span>اعتبار شماره شبا:</span><b id="r3">-</b></div>
+      <div class="r-row"><span id="l1">نام بانک:</span><b id="r1">-</b></div>
+      <div class="r-row"><span id="l2">نتیجه تبدیل:</span><b id="r2" style="direction:ltr">-</b></div>
+      <div class="r-row"><span id="l3">وضعیت اعتبار:</span><b id="r3">-</b></div>
     </div>
   </div>
   <div class="box seo">
-    <h2>الگوریتم تشخیص شماره کارت و شبا</h2>
-    <p>شماره کارت بانکی با الگوریتم استاندارد لوهن (Luhn) و شماره شبا (۲۴ رقم پس از IR ثابت) با استاندارد جهانی ISO-7064 بررسی و نام بانک استخراج می‌شود.</p>
+    <h2>تبدیل شبا به شماره حساب چگونه کار می‌کند؟</h2>
+    <p>طبق استاندارد ISO-7064 بانک مرکزی ایران، در هر شماره شبا، ۳ رقم بعد از کد کنترلی نشان‌دهنده کد بانک و ۱۸ رقم پایانی حاوی شماره حساب بانکی است. با این ابزار می‌توانید شماره حساب را از شبا استخراج کرده یا برای حساب‌های متمرکز، شبا تولید کنید.</p>
   </div>
 </main>
 <script src="app.js?v=4"></script>
 <script>
-const BC={'603799':'بانک ملی','589210':'بانک سپه','627648':'توسعه صادرات','627961':'صنعت و معدن','603770':'کشاورزی','628023':'مسکن','627760':'پست بانک','502908':'توسعه تعاون','627412':'اقتصاد نوین','622106':'پارسیان','502229':'پاسارگاد','627488':'کارآفرین','621986':'سامان','639346':'سینا','639607':'سرمایه','636214':'آینده','502806':'شهر','502938':'دی','603769':'صادرات','610433':'ملت','627353':'تجارت','589463':'رفاه','639370':'مهر اقتصاد','504172':'رسالت','606373':'مهر ایران','505416':'گردشگری','636949':'حکمت','585983':'تجارت'};
-const BS={'017':'بانک ملی','015':'بانک سپه','020':'توسعه صادرات','011':'صنعت و معدن','016':'کشاورزی','014':'مسکن','021':'پست بانک','022':'توسعه تعاون','055':'اقتصاد نوین','054':'پارسیان','057':'پاسارگاد','053':'کارآفرین','056':'سامان','059':'سینا','058':'سرمایه','062':'آینده','061':'شهر','066':'دی','019':'صادرات','012':'ملت','018':'تجارت','013':'رفاه','070':'رسالت','060':'مهر ایران','064':'گردشگری'};
-function chkNum(el,mx,errId){
+const BC={'603799':'بانک ملی','589210':'بانک سپه','627648':'توسعه صادرات','627961':'صنعت و معدن','603770':'کشاورزی','628023':'مسکن','627760':'پست بانک','502908':'توسعه تعاون','627412':'اقتصاد نوین','622106':'پارسیان','502229':'پاسارگاد','627488':'کارآفرین','621986':'سامان','639346':'سینا','639607':'سرمایه','636214':'آینده','502806':'شهر','502938':'دی','603769':'صادرات','610433':'ملت','627353':'تجارت','589463':'رفاه','504172':'رسالت','606373':'مهر ایران','505416':'گردشگری','585983':'تجارت'};
+const BS={'017':'بانک ملی','012':'بانک ملت','019':'بانک صادرات','018':'بانک تجارت','015':'بانک سپه','016':'بانک کشاورزی','014':'بانک مسکن','056':'بانک سامان (و بلوبانک)','057':'بانک پاسارگاد (و ویپاد)','054':'بانک پارسیان','060':'قرض‌الحسنه مهر ایران','070':'قرض‌الحسنه رسالت','013':'بانک رفاه کارگران','061':'بانک شهر','062':'بانک آینده','055':'بانک اقتصاد نوین','059':'بانک سینا','064':'بانک گردشگری','021':'پست بانک ایران','022':'بانک توسعه تعاون','066':'بانک دی','053':'بانک کارآفرین'};
+const bSel=document.getElementById('bnk');
+for(let k in BS)bSel.innerHTML+=`<option value="${k}">${BS[k]}</option>`;
+
+function chMd(){
+  let m=document.getElementById('md').value;
+  document.getElementById('bx-sh').style.display=m==='sh2ac'?'block':'none';
+  document.getElementById('bx-ac').style.display=m==='ac2sh'?'block':'none';
+  document.getElementById('bx-cd').style.display=m==='card'?'block':'none';
+  document.getElementById('res').classList.remove('on');
+}
+function chkN(el,mx,eid){
   let raw=el.value.replace(/^IR/i,''),cln=raw.replace(/\D/g,'').slice(0,mx);
-  let bx=document.getElementById(errId);
+  let bx=document.getElementById(eid);
   if(raw!==cln){bx.innerText='⚠️ فقط وارد کردن اعداد مجاز است!';bx.style.display='block';}
   else bx.style.display='none';
   el.value=cln;
 }
-function luhn(s){
-  if(s.length!==16)return false;
-  let sum=0;for(let i=0;i<16;i++){let d=+s[i]*(i%2===0?2:1);sum+=d>9?d-9:d;}
-  return sum%10===0;
-}
 function calc(){
-  let c=document.getElementById('c').value.replace(/\D/g,'');
-  let sh=document.getElementById('sh').value.replace(/\D/g,'');
-  let bName=c.length>=6?(BC[c.slice(0,6)]||'بانک نامشخص'):(sh.length>=5?(BS[sh.slice(2,5)]||'بانک نامشخص'):'وارد نشده');
-  let cOk=!c?'وارد نشده':c.length<16?`ناقص (${fmt(c.length)} از ۱۶ رقم)`:(luhn(c)?'✅ معتبر و صحیح':'❌ نامعتبر (خطای رقم)');
-  let shOk='وارد نشده';
-  if(sh){
-    if(sh.length!==24)shOk=`❌ ناقص (${fmt(sh.length)} از ۲۴ رقم)`;
-    else{
-      let mv=sh.slice(2)+'1827'+sh.slice(0,2);
-      shOk=BigInt(mv)%97n===1n?'✅ شبای معتبر و صحیح':'❌ شبای نامعتبر';
-    }
+  let m=document.getElementById('md').value;
+  const set=(l1,r1,l2,r2,l3,r3)=>{
+    document.getElementById('l1').innerText=l1;document.getElementById('r1').innerText=r1;
+    document.getElementById('l2').innerText=l2;document.getElementById('r2').innerText=r2;
+    document.getElementById('l3').innerText=l3;document.getElementById('r3').innerText=r3;
+    document.getElementById('res').classList.add('on');
+  };
+  if(m==='sh2ac'){
+    let sh=document.getElementById('sh').value.replace(/\D/g,'');
+    if(sh.length!==24){alert('لطفاً ۲۴ رقم شبا را کامل وارد کنید.');return;}
+    let mv=sh.slice(2)+'1827'+sh.slice(0,2);
+    let ok=BigInt(mv)%97n===1n;
+    let bName=BS[sh.slice(2,5)]||'بانک نامشخص';
+    let acc=sh.slice(6).replace(/^0+/,'')||'0';
+    set('نام بانک:',bName,'شماره حساب استخراج‌شده:',toFa(acc),'اعتبار شبا:',ok?'✅ شبای معتبر و صحیح':'❌ شبای نامعتبر (خطای رقم)');
+  }else if(m==='ac2sh'){
+    let bCode=bSel.value,acc=document.getElementById('ac').value.replace(/\D/g,'');
+    if(!acc){alert('لطفاً شماره حساب را وارد کنید.');return;}
+    let bban=bCode+'0'+acc.padStart(18,'0');
+    let rem=BigInt(bban+'182700')%97n;
+    let cd=String(98n-rem).padStart(2,'0');
+    set('نام بانک:',BS[bCode],'شماره شبای محاسبه‌شده:','IR'+toFa(cd+bban),'نوع فرمول:','✅ استاندارد ISO-7064 (حساب متمرکز)');
+  }else{
+    let c=document.getElementById('c').value.replace(/\D/g,'');
+    if(c.length<6){alert('حداقل ۶ رقم اول کارت را وارد کنید.');return;}
+    let bName=BC[c.slice(0,6)]||'بانک نامشخص';
+    let sum=0;for(let i=0;i<16;i++){let d=+c[i]*(i%2===0?2:1);sum+=d>9?d-9:d;}
+    let ok=c.length===16&&(sum%10===0);
+    set('بانک صادرکننده کارت:',bName,'پیش‌شماره بانک (BIN):',toFa(c.slice(0,6)),'اعتبار ۱۶ رقم کارت:',c.length<16?'ناقص (کمتر از ۱۶ رقم)':(ok?'✅ کارت معتبر و صحیح':'❌ شماره کارت نامعتبر'));
   }
-  document.getElementById('r1').innerText=bName;
-  document.getElementById('r2').innerText=cOk;
-  document.getElementById('r3').innerText=shOk;
-  document.getElementById('res').classList.add('on');
 }
 </script>
 </body>
