@@ -7,8 +7,16 @@
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1e3a8a">
 <link rel="stylesheet" href="style.css?v=6">
+<style>
+@keyframes pls{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes bar{0%{width:0}50%{width:75%}100%{width:98%}}
+#net-b{position:fixed;bottom:14px;left:12px;right:12px;max-width:420px;margin:auto;background:linear-gradient(135deg,#dc2626,#ea580c);color:#fff;padding:10px 14px;border-radius:14px;font-size:12px;font-weight:700;text-align:center;box-shadow:0 6px 20px #0005;z-index:999;display:none;animation:pls 1.4s infinite}
+#ld-bar{position:fixed;top:0;right:0;height:4px;background:#38bdf8;z-index:1000;display:none;animation:bar 2.5s ease-out forwards}
+</style>
 </head>
 <body>
+<div id="ld-bar"></div>
+<div id="net-b"></div>
 <header id="m-hdr">
   <div class="nav-c">
     <a href="index.html" class="logo">🧮 چرتکه</a>
@@ -26,12 +34,9 @@
     <button id="ibtn" onclick="inst()" style="width:100%;background:#10b981;color:#fff;border:none;padding:9px;border-radius:10px;font-size:12px;font-weight:700;margin-top:10px;cursor:pointer">📲 نصب اپلیکیشن «چرتکه» روی صفحه اصلی گوشی</button>
     <div id="im" style="display:none;background:#f0fdf4;color:#065f46;border:1px solid #86efac;padding:10px;border-radius:10px;margin-top:8px;font-size:11.5px;text-align:right;line-height:1.9">
       ۱. بالای مرورگر کروم روی <b>سه نقطه (⋮)</b> بزنید و گزینه <b>Add to Home screen</b> را انتخاب کنید.<br>
-      ۲. سپس روی دکمه سبز زیر بزنید:<br>
       <button onclick="okInst()" style="width:100%;background:#059669;color:#fff;border:none;padding:8px;border-radius:8px;margin-top:6px;font-weight:700;cursor:pointer">✅ به صفحه اصلی اضافه کردم (تایید نصب)</button>
     </div>
-    <div id="ok-box" style="display:none;background:#dcfce7;color:#166534;border:1.5px solid #22c55e;padding:10px;border-radius:10px;margin-top:8px;font-size:12px;font-weight:700;text-align:center">
-      🎉 تبریک! اپلیکیشن «چرتکه» با موفقیت روی گوشی شما نصب شد!
-    </div>
+    <div id="ok-box" style="display:none;background:#dcfce7;color:#166534;border:1.5px solid #22c55e;padding:10px;border-radius:10px;margin-top:8px;font-size:12px;font-weight:700;text-align:center">🎉 تبریک! اپلیکیشن «چرتکه» با موفقیت نصب شد!</div>
     <input type="text" id="srch" class="srch" placeholder="🔍 جستجو در بین ۲۲ ابزار (مثلا: چک، قسطی، طلا، وام...)" oninput="flt()">
     <div class="cats" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin-top:12px">
       <button class="cat on" onclick="setCat('all',this)">همه ابزارها (۲۲)</button>
@@ -43,7 +48,7 @@
   <div class="grid" id="grid"></div>
   <div class="box" style="margin-top:16px;text-align:center;border:1.5px dashed var(--pr)">
     <h2 style="font-size:14px;color:var(--pr);margin-bottom:4px">📢 سفارش تبلیغات و ارتباط با مدیریت</h2>
-    <p style="font-size:11.5px;color:var(--mu);margin-bottom:10px">جهت درج تبلیغات یا ارتباط مستقیم با مدیریت در تلگرام، روبیکا یا ایمیل کلیک کنید:</p>
+    <p style="font-size:11.5px;color:var(--mu);margin-bottom:10px">جهت درج تبلیغات یا ارتباط مستقیم با مدیریت کلیک کنید:</p>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
       <a href="https://t.me/Mohamadseccret" target="_blank" class="btn" style="flex:1;background:#0284c7;text-decoration:none;font-size:11.5px;padding:9px">✈️ تلگرام: @Mohamadseccret</a>
       <a href="https://rubika.ir/mmmdrz_f" target="_blank" class="btn" style="flex:1;background:#7c3aed;text-decoration:none;font-size:11.5px;padding:9px">💎 روبیکا: @mmmdrz_f</a>
@@ -58,30 +63,7 @@
 </main>
 <footer>تمامی حقوق برای سایت <b>چرتکه</b> محفوظ است © ۱۴۰۴</footer>
 <script>
-const T=[
-['vam','bank','🏦','محاسبه اقساط وام','قسط و سود بانکی'],
-['tala','bank','🪙','محاسبه فاکتور طلا','طلای نو و دست‌دوم'],
-['chek','bank','📝','مبلغ چک به حروف','ویژه ثبت چک صیادی'],
-['ghesti','bank','📱','خرید قسطی کالا','اقساط موبایل و کالا'],
-['sekeh','bank','🟡','حباب سکه طلا','ارزش ذاتی و حباب'],
-['sepordeh','bank','💰','سود سپرده بانکی','سود روزشمار و ماهانه'],
-['kart','bank','💳','تبدیل شبا و کارت','حساب، شبا و نام بانک'],
-['tabdil','bank','⚖️','تبدیل مثقال و گرم','واحد طلا و مساحت'],
-['darsad','bank','📊','درصد و تخفیف','تخفیف و درصد کنکور'],
-['amlak','home','🏠','تبدیل رهن و اجاره','رهن به اجاره و برعکس'],
-['komision','home','🤝','کمیسیون املاک','تعرفه قولنامه و بنگاه'],
-['khodro','home','🚗','افت قیمت خودرو','محاسبه افت رنگ و شاسی'],
-['hoghoogh','home','👷','عیدی و سنوات','محاسبه طبق قانون کار'],
-['mehrieh','home','💍','مهریه به نرخ روز','طبق شاخص بانک مرکزی'],
-['ers','home','📜','محاسبه سهم‌الارث','تقسیم ارث قانون مدنی'],
-['tarikh','life','🔄','تبدیل تاریخ تقویم','شمسی، میلادی و قمری'],
-['sen','life','📅','محاسبه دقیق سن','سن به سال، ماه و روز'],
-['faseleh','life','⏳','فاصله بین دو تاریخ','اختلاف دقیق دو تاریخ'],
-['bmi','life','⚖️','شاخص توده بدنی','تناسب اندام و BMI'],
-['kaleri','life','🔥','کالری روزانه بدن','کالری لاغری و چاقی'],
-['bardari','life','👶','محاسبه سن بارداری','هفته بارداری و زایمان'],
-['moadel','life','🎓','محاسبه معدل کل','معدل دانشگاه و مدرسه']
-];
+const T=[['vam','bank','🏦','محاسبه اقساط وام','قسط و سود بانکی'],['tala','bank','🪙','محاسبه فاکتور طلا','طلای نو و دست‌دوم'],['chek','bank','📝','مبلغ چک به حروف','ویژه ثبت چک صیادی'],['ghesti','bank','📱','خرید قسطی کالا','اقساط موبایل و کالا'],['sekeh','bank','🟡','حباب سکه طلا','ارزش ذاتی و حباب'],['sepordeh','bank','💰','سود سپرده بانکی','سود روزشمار و ماهانه'],['kart','bank','💳','تبدیل شبا و کارت','حساب، شبا و نام بانک'],['tabdil','bank','⚖️','تبدیل مثقال و گرم','واحد طلا و مساحت'],['darsad','bank','📊','درصد و تخفیف','تخفیف و درصد کنکور'],['amlak','home','🏠','تبدیل رهن و اجاره','رهن به اجاره و برعکس'],['komision','home','🤝','کمیسیون املاک','تعرفه قولنامه و بنگاه'],['khodro','home','🚗','افت قیمت خودرو','محاسبه افت رنگ و شاسی'],['hoghoogh','home','👷','عیدی و سنوات','محاسبه طبق قانون کار'],['mehrieh','home','💍','مهریه به نرخ روز','طبق شاخص بانک مرکزی'],['ers','home','📜','محاسبه سهم‌الارث','تقسیم ارث قانون مدنی'],['tarikh','life','🔄','تبدیل تاریخ تقویم','شمسی، میلادی و قمری'],['sen','life','📅','محاسبه دقیق سن','سن به سال، ماه و روز'],['faseleh','life','⏳','فاصله بین دو تاریخ','اختلاف دقیق دو تاریخ'],['bmi','life','⚖️','شاخص توده بدنی','تناسب اندام و BMI'],['kaleri','life','🔥','کالری روزانه بدن','کالری لاغری و چاقی'],['bardari','life','👶','محاسبه سن بارداری','هفته بارداری و زایمان'],['moadel','life','🎓','محاسبه معدل کل','معدل دانشگاه و مدرسه']];
 document.getElementById('grid').innerHTML=T.map(x=>`<a href="${x[0]}.html" class="t-card" data-c="${x[1]}"><div class="t-ic">${x[2]}</div><b>${x[3]}</b><span>${x[4]}</span></a>`).join('');
 if(localStorage.getItem('ch_dark')==='1'){document.body.classList.add('dark');document.getElementById('dm-btn').innerText='☀️ روز';}
 function tgD(){let d=document.body.classList.toggle('dark');localStorage.setItem('ch_dark',d?'1':'0');document.getElementById('dm-btn').innerText=d?'☀️ روز':'🌙 شب';}
@@ -90,18 +72,27 @@ function upClk(){
   document.getElementById('t-bar').innerHTML=`📅 امروز: <b style="color:#38bdf8">${fa}</b> | قمری: ${ar} | <span dir="ltr">${en}</span> &nbsp;⏰ ساعت: <b style="color:#4ade80">${tm}</b>`;
 }
 upClk();setInterval(upClk,1000);
-let dP,curCat='all';
+let dP,curCat='all',nb=document.getElementById('net-b'),lb=document.getElementById('ld-bar');
+function shNet(m,ok){nb.innerText=m;nb.style.background=ok?'#10b981':'linear-gradient(135deg,#dc2626,#ea580c)';nb.style.display='block';if(ok)setTimeout(()=>nb.style.display='none',2500);}
+function chkNet(){
+  if(!navigator.onLine){shNet('📡 اینترنت شما قطع است! (ابزارهای بازشده بدون نت کار می‌کنند)');return;}
+  let c=navigator.connection;
+  if(c&&(c.effectiveType==='slow-2g'||c.effectiveType==='2g'||c.rtt>600))shNet('🐢 سرعت اینترنت شما بسیار ضعیف است!');
+  else nb.style.display='none';
+}
+window.addEventListener('offline',()=>shNet('📡 اتصال اینترنت شما قطع شد!'));
+window.addEventListener('online',()=>shNet('⚡ اتصال اینترنت برقرار شد!',1));
+if(navigator.connection)navigator.connection.addEventListener('change',chkNet);
+chkNet();
+document.querySelectorAll('a[href$=".html"]').forEach(a=>a.addEventListener('click',()=>{
+  lb.style.display='block';
+  setTimeout(()=>{if(document.visibilityState==='visible')shNet('⏳ اینترنت شما کمی ضعیف است؛ در حال باز کردن ابزار...');},350);
+}));
+window.addEventListener('pageshow',()=>{lb.style.display='none';chkNet();});
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dP=e;});
 window.addEventListener('appinstalled',()=>okInst());
-function okInst(){
-  document.getElementById('im').style.display='none';document.getElementById('ok-box').style.display='block';
-  let b=document.getElementById('ibtn');b.innerText='✅ اپلیکیشن «چرتکه» با موفقیت نصب شد';b.style.background='#059669';
-  alert('🎉 تبریک! اپلیکیشن «چرتکه» با موفقیت روی گوشی شما نصب شد!');
-}
-async function inst(){
-  if(dP){dP.prompt();let r=await dP.userChoice;if(r.outcome==='accepted')okInst();}
-  else{let m=document.getElementById('im');m.style.display=m.style.display==='none'?'block':'none';}
-}
+function okInst(){document.getElementById('im').style.display='none';document.getElementById('ok-box').style.display='block';let b=document.getElementById('ibtn');b.innerText='✅ اپلیکیشن «چرتکه» با موفقیت نصب شد';b.style.background='#059669';alert('🎉 تبریک! اپلیکیشن «چرتکه» با موفقیت نصب شد!');}
+async function inst(){if(dP){dP.prompt();let r=await dP.userChoice;if(r.outcome==='accepted')okInst();}else{let m=document.getElementById('im');m.style.display=m.style.display==='none'?'block':'none';}}
 function setCat(c,b){curCat=c;document.querySelectorAll('.cat').forEach(x=>x.classList.remove('on'));b.classList.add('on');flt();}
 function flt(){let q=document.getElementById('srch').value.trim();document.querySelectorAll('.t-card').forEach(e=>{e.style.display=((curCat==='all'||e.dataset.c===curCat)&&e.innerText.includes(q))?'flex':'none';});}
 let lv=(+localStorage.getItem('ch_v')||0)+1;localStorage.setItem('ch_v',lv);
