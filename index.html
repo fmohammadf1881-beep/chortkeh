@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>چرتکه | مرجع ۲۰ ابزار محاسبه‌گر آنلاین مالی، حقوقی و سلامت</title>
+<title>چرتکه | مرجع ۲۲ ابزار محاسبه‌گر آنلاین مالی، حقوقی و سلامت</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1e3a8a">
 <link rel="stylesheet" href="style.css?v=6">
@@ -16,22 +16,18 @@
 
   <div class="hero">
     <h1>🧮 چرتکه؛ جعبه ابزار محاسبات آنلاین</h1>
-    <p>۲۰ ابزار دقیق و سریع برای محاسبات بانکی، طلا، املاک، حقوقی و سلامت</p>
-    
+    <p>۲۲ ابزار دقیق و سریع برای محاسبات بانکی، طلا، چک، املاک و سلامت</p>
     <button onclick="instApp()" style="width:100%;background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;padding:10px;border-radius:10px;font-size:12.5px;font-weight:700;margin-top:10px;cursor:pointer">
       📲 نصب اپلیکیشن «چرتکه» روی صفحه اصلی گوشی
     </button>
     <div id="inst-msg" style="display:none;background:#f0fdf4;color:#065f46;border:1px solid #86efac;padding:10px;border-radius:10px;margin-top:8px;font-size:11.5px;text-align:right;line-height:1.9">
-      ✅ <b>روش نصب در ۱ ثانیه:</b><br>
-      ۱. در مرورگر کروم، بالای صفحه روی <b>سه نقطه (⋮)</b> بزنید.<br>
-      ۲. گزینه <b>Add to Home screen (افزودن به صفحه اصلی)</b> را بزنید تا آیکون برنامه چرتکه روی صفحه گوشی شما نصب شود!
+      ✅ در مرورگر کروم، بالای صفحه روی <b>سه نقطه (⋮)</b> بزنید و گزینه <b>Add to Home screen (افزودن به صفحه اصلی)</b> را انتخاب کنید!
     </div>
-
-    <input type="text" id="srch" class="srch" placeholder="🔍 جستجو در بین ۲۰ ابزار (مثلا: وام، طلا، خودرو، معدل...)" oninput="flt()">
+    <input type="text" id="srch" class="srch" placeholder="🔍 جستجو در بین ۲۲ ابزار (مثلا: چک، قسطی، طلا، وام...)" oninput="flt()">
     <div class="cats" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin-top:12px">
-      <button class="cat on" onclick="setCat('all',this)">همه ابزارها (۲۰)</button>
+      <button class="cat on" onclick="setCat('all',this)">همه ابزارها (۲۲)</button>
       <button class="cat" onclick="setCat('bank',this)">🏦 بانکی و طلا</button>
-      <button class="cat" onclick="setCat('home',this)">🏠 املاک و خودرو</button>
+      <button class="cat" onclick="setCat('home',this)">🏠 املاک و بازار</button>
       <button class="cat" onclick="setCat('life',this)">📅 تاریخ و سلامت</button>
     </div>
   </div>
@@ -39,6 +35,8 @@
   <div class="grid" id="grid">
     <a href="vam.html" class="t-card" data-c="bank"><div class="t-ic">🏦</div><b>محاسبه اقساط وام</b><span>قسط و سود بانکی</span></a>
     <a href="tala.html" class="t-card" data-c="bank"><div class="t-ic">🪙</div><b>محاسبه فاکتور طلا</b><span>طلای نو و دست‌دوم</span></a>
+    <a href="chek.html" class="t-card" data-c="bank"><div class="t-ic">📝</div><b>مبلغ چک به حروف</b><span>ویژه ثبت چک صیادی</span></a>
+    <a href="ghesti.html" class="t-card" data-c="bank"><div class="t-ic">📱</div><b>خرید قسطی کالا</b><span>اقساط موبایل و کالا</span></a>
     <a href="sekeh.html" class="t-card" data-c="bank"><div class="t-ic">🟡</div><b>حباب سکه طلا</b><span>ارزش ذاتی و حباب</span></a>
     <a href="sepordeh.html" class="t-card" data-c="bank"><div class="t-ic">💰</div><b>سود سپرده بانکی</b><span>سود روزشمار و ماهانه</span></a>
     <a href="kart.html" class="t-card" data-c="bank"><div class="t-ic">💳</div><b>تبدیل شبا و کارت</b><span>حساب، شبا و نام بانک</span></a>
@@ -58,6 +56,11 @@
     <a href="bardari.html" class="t-card" data-c="life"><div class="t-ic">👶</div><b>محاسبه سن بارداری</b><span>هفته بارداری و زایمان</span></a>
     <a href="moadel.html" class="t-card" data-c="life"><div class="t-ic">🎓</div><b>محاسبه معدل کل</b><span>معدل دانشگاه و مدرسه</span></a>
   </div>
+
+  <div class="box" style="margin-top:18px;text-align:center;border:1.5px dashed var(--pr)">
+    <h2 style="font-size:15px;color:var(--pr);margin-bottom:6px">📢 جایگاه تبلیغات و معرفی کسب‌وکار شما</h2>
+    <p style="font-size:12px;color:var(--mu)">جهت درج بنر تبلیغاتی یا معرفی خدمات مالی، طلا و املاک در سایت چرتکه با ما در ارتباط باشید.</p>
+  </div>
 </main>
 <script src="app.js?v=6"></script>
 <script>
@@ -68,28 +71,19 @@ try{
   let en=new Intl.DateTimeFormat('en-US',{day:'numeric',month:'short',year:'numeric'}).format(d);
   document.getElementById('t-bar').innerHTML=`📅 امروز: <b style="color:#38bdf8">${fa}</b> | قمری: ${ar} | <span dir="ltr">${en}</span>`;
 }catch(e){}
-
 let dP;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dP=e;});
 function instApp(){
-  if(dP){dP.prompt();}
-  else{
-    let m=document.getElementById('inst-msg');
-    m.style.display=m.style.display==='none'?'block':'none';
-  }
+  if(dP)dP.prompt();
+  else{let m=document.getElementById('inst-msg');m.style.display=m.style.display==='none'?'block':'none';}
 }
 let curCat='all';
 function setCat(c,btn){
-  curCat=c;
-  document.querySelectorAll('.cat').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  flt();
+  curCat=c;document.querySelectorAll('.cat').forEach(b=>b.classList.remove('on'));btn.classList.add('on');flt();
 }
 function flt(){
   let q=document.getElementById('srch').value.trim();
   document.querySelectorAll('.t-card').forEach(el=>{
-    let mCat=(curCat==='all'||el.dataset.c===curCat);
-    let mTxt=el.innerText.includes(q);
-    el.style.display=(mCat&&mTxt)?'flex':'none';
+    el.style.display=((curCat==='all'||el.dataset.c===curCat)&&el.innerText.includes(q))?'flex':'none';
   });
 }
 </script>
