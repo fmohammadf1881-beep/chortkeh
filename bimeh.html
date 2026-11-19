@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه حق بیمه تامین اجتماعی و حقوق بازنشستگی | چرتکه</title>
+<link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+<main>
+  <div class="box">
+    <h1 style="font-size:17px;color:var(--pr);margin-bottom:14px">🛡️ محاسبه حق بیمه و مستمری بازنشستگی</h1>
+    <div class="fg">
+      <label>حقوق و مزایای ماهانه مشمول بیمه (تومان)</label>
+      <input type="text" id="s" class="inp money" value="12,000,000" inputmode="numeric">
+    </div>
+    <div class="fg">
+      <label>سابقه پرداخت بیمه تا زمان بازنشستگی (سال)</label>
+      <input type="number" id="y" class="inp" value="30" min="1" max="35">
+    </div>
+    <button class="btn" onclick="calc()">محاسبه حق بیمه و بازنشستگی</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>حق بیمه سهم کارگر (۷٪):</span><b id="r1">0</b></div>
+      <div class="r-row"><span>حق بیمه سهم کارفرما (۲۳٪):</span><b id="r2">0</b></div>
+      <div class="r-row"><span>کل حق بیمه واریزی ماهانه (۳۰٪):</span><b id="r3">0</b></div>
+      <div class="r-row"><span>مستمری تخمینی بازنشستگی:</span><b id="r4">0</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>فرمول حق بیمه تامین اجتماعی و بازنشستگی</h2>
+    <p>کل حق بیمه تامین اجتماعی ۳۰ درصد حقوق ماهانه است که ۷ درصد آن از حقوق کارگر کسر شده و ۲۳ درصد (۲۰٪ بیمه + ۳٪ بیمه بیکاری) بر عهده کارفرماست. مستمری بازنشستگی نیز بر اساس سنوات پرداخت بیمه تقسیم بر ۳۰ محاسبه می‌شود.</p>
+  </div>
+</main>
+<script src="app.js?v=6"></script>
+<script>
+function calc(){
+  let s=val('s'),y=Math.min(val('y')||30,35);
+  if(!s)return;
+  document.getElementById('r1').innerText=fmt(s*0.07)+' تومان';
+  document.getElementById('r2').innerText=fmt(s*0.23)+' تومان';
+  document.getElementById('r3').innerText=fmt(s*0.30)+' تومان';
+  document.getElementById('r4').innerText=fmt((s*y)/30)+' تومان در ماه';
+  document.getElementById('res').classList.add('on');
+}
+</script>
+</body>
+</html>
