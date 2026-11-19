@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه خرید قسطی کالا، موبایل و طلا | چرتکه</title>
+<link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+<main>
+  <div class="box">
+    <h1 style="font-size:17px;color:var(--pr);margin-bottom:14px">📱 محاسبه اقساط خرید قسطی کالا و موبایل</h1>
+    <div class="fg">
+      <label>قیمت نقدی کالا (تومان)</label>
+      <input type="text" id="p" class="inp money" value="40,000,000" inputmode="numeric">
+    </div>
+    <div class="fg">
+      <label>مبلغ پیش‌پرداخت (تومان)</label>
+      <input type="text" id="d" class="inp money" value="10,000,000" inputmode="numeric">
+    </div>
+    <div class="fg" style="display:flex;gap:8px">
+      <div style="flex:1"><label>تعداد اقساط (ماه)</label><input type="number" id="m" class="inp" value="6"></div>
+      <div style="flex:1"><label>سود ماهانه بازار (٪)</label><input type="number" id="r" class="inp" value="3.5" step="0.5"></div>
+    </div>
+    <button class="btn" onclick="calc()">محاسبه اقساط کالا</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>مانده بدهی قسطی:</span><b id="r1">0</b></div>
+      <div class="r-row"><span>مبلغ هر قسط ماهانه:</span><b id="r2">0</b></div>
+      <div class="r-row"><span>کل سود اضافه‌پرداختی:</span><b id="r3">0</b></div>
+      <div class="r-row"><span>قیمت تمام‌شده کالا:</span><b id="r4">0</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>فرمول محاسبه خرید قسطی بازار</h2>
+    <p>در خرید اقساطی موبایل، لپ‌تاپ و لوازم خانگی، ابتدا پیش‌پرداخت از قیمت نقدی کسر شده و سپس به مانده بدهی به ازای هر ماه، درصد سود ماهانه بازار تعلق می‌گیرد.</p>
+  </div>
+</main>
+<script src="app.js?v=6"></script>
+<script>
+function calc(){
+  let p=val('p'),d=val('d'),m=val('m'),r=val('r');
+  if(!p||!m||d>=p)return;
+  let rem=p-d;
+  let totInt=rem*(r/100)*m;
+  let totPay=rem+totInt;
+  document.getElementById('r1').innerText=fmt(rem)+' تومان';
+  document.getElementById('r2').innerText=fmt(totPay/m)+' تومان';
+  document.getElementById('r3').innerText=fmt(totInt)+' تومان';
+  document.getElementById('r4').innerText=fmt(d+totPay)+' تومان';
+  document.getElementById('res').classList.add('on');
+}
+</script>
+</body>
+</html>
