@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محاسبه سود و ضرر تتر، دلار، طلا و ارز دیجیتال | چرتکه</title>
+<link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+<main>
+  <div class="box">
+    <h1 style="font-size:17px;color:var(--pr);margin-bottom:14px">📈 محاسبه سود و ضرر سرمایه‌گذاری (ارز، طلا و سهام)</h1>
+    <div class="fg">
+      <label>کل مبلغ سرمایه‌گذاری شما (تومان)</label>
+      <input type="text" id="m" class="inp money" value="50,000,000" inputmode="numeric">
+    </div>
+    <div class="fg">
+      <label>قیمت خرید هر واحد (تومان)</label>
+      <input type="text" id="b" class="inp money" value="60,000" inputmode="numeric">
+    </div>
+    <div class="fg">
+      <label>قیمت فروش یا قیمت فعلی هر واحد (تومان)</label>
+      <input type="text" id="s" class="inp money" value="72,000" inputmode="numeric">
+    </div>
+    <button class="btn" onclick="calc()">محاسبه سود یا ضرر</button>
+    <div id="res" class="res">
+      <div class="r-row"><span>تعداد واحد خریداری‌شده:</span><b id="r1">0</b></div>
+      <div class="r-row"><span>ارزش فعلی کل دارایی شما:</span><b id="r2">0</b></div>
+      <div class="r-row"><span>میزان سود یا ضرر خالص:</span><b id="r3">0</b></div>
+      <div class="r-row"><span>درصد بازدهی سرمایه:</span><b id="r4">0</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>نحوه محاسبه بازدهی سرمایه در بازار مالی</h2>
+    <p>با وارد کردن مبلغ اولیه خرید و قیمت ورود و خروج (در بازار تتر، دلار، طلا یا بورس)، درصد دقیق سود یا زیان و ارزش فعلی دارایی شما محاسبه می‌شود.</p>
+  </div>
+</main>
+<script src="app.js?v=6"></script>
+<script>
+function calc(){
+  let m=val('m'),b=val('b'),s=val('s');
+  if(!m||!b||!s)return;
+  let qty=m/b,now=qty*s,prf=now-m,pct=((s-b)/b)*100;
+  let st=prf>=0?' (سود ✅)':' (ضرر ❌)';
+  document.getElementById('r1').innerText=toFa(qty.toFixed(2))+' واحد';
+  document.getElementById('r2').innerText=fmt(now)+' تومان';
+  document.getElementById('r3').innerText=fmt(Math.abs(prf))+' تومان'+st;
+  document.getElementById('r4').innerText=toFa(Math.abs(pct).toFixed(1))+' درصد'+st;
+  document.getElementById('res').classList.add('on');
+}
+</script>
+</body>
+</html>
