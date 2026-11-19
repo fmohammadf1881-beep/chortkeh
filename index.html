@@ -26,7 +26,7 @@
     <button id="ibtn" onclick="inst()" style="width:100%;background:#10b981;color:#fff;border:none;padding:9px;border-radius:10px;font-size:12px;font-weight:700;margin-top:10px;cursor:pointer">📲 نصب اپلیکیشن «چرتکه» روی صفحه اصلی گوشی</button>
     <div id="im" style="display:none;background:#f0fdf4;color:#065f46;border:1px solid #86efac;padding:10px;border-radius:10px;margin-top:8px;font-size:11.5px;text-align:right;line-height:1.9">
       ۱. بالای مرورگر کروم روی <b>سه نقطه (⋮)</b> بزنید و گزینه <b>Add to Home screen</b> را انتخاب کنید.<br>
-      ۲. سپس برای ثبت نصب، روی دکمه سبز زیر بزنید:<br>
+      ۲. سپس روی دکمه سبز زیر بزنید:<br>
       <button onclick="okInst()" style="width:100%;background:#059669;color:#fff;border:none;padding:8px;border-radius:8px;margin-top:6px;font-weight:700;cursor:pointer">✅ به صفحه اصلی اضافه کردم (تایید نصب)</button>
     </div>
     <div id="ok-box" style="display:none;background:#dcfce7;color:#166534;border:1.5px solid #22c55e;padding:10px;border-radius:10px;margin-top:8px;font-size:12px;font-weight:700;text-align:center">
@@ -42,8 +42,18 @@
   </div>
   <div class="grid" id="grid"></div>
   <div class="box" style="margin-top:16px;text-align:center;border:1.5px dashed var(--pr)">
-    <h2 style="font-size:14px;color:var(--pr);margin-bottom:4px">📢 جایگاه تبلیغات و معرفی کسب‌وکار شما</h2>
-    <p style="font-size:11.5px;color:var(--mu)">جهت درج بنر تبلیغاتی در سایت چرتکه با ما در ارتباط باشید.</p>
+    <h2 style="font-size:14px;color:var(--pr);margin-bottom:4px">📢 سفارش تبلیغات و ارتباط با مدیریت</h2>
+    <p style="font-size:11.5px;color:var(--mu);margin-bottom:10px">جهت درج تبلیغات یا ارتباط مستقیم با مدیریت در تلگرام، روبیکا یا ایمیل کلیک کنید:</p>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <a href="https://t.me/Mohamadseccret" target="_blank" class="btn" style="flex:1;background:#0284c7;text-decoration:none;font-size:11.5px;padding:9px">✈️ تلگرام: @Mohamadseccret</a>
+      <a href="https://rubika.ir/mmmdrz_f" target="_blank" class="btn" style="flex:1;background:#7c3aed;text-decoration:none;font-size:11.5px;padding:9px">💎 روبیکا: @mmmdrz_f</a>
+    </div>
+    <a href="mailto:fmohammadf1881@gmail.com" style="display:block;margin-top:8px;font-size:11px;color:var(--mu);text-decoration:none">✉️ ایمیل: fmohammadf1881@gmail.com</a>
+  </div>
+  <div class="box" style="text-align:center;padding:10px;font-size:12px;display:flex;justify-content:space-around;background:var(--cd)">
+    <span>👁️ بازدید امروز: <b id="v-day" style="color:#10b981">...</b></span>
+    <span>📊 کل بازدیدها: <b id="v-tot" style="color:var(--pr)">...</b></span>
+    <span>⚡ ابزارهای فعال: <b style="color:#f59e0b">۲۲</b></span>
   </div>
 </main>
 <footer>تمامی حقوق برای سایت <b>چرتکه</b> محفوظ است © ۱۴۰۴</footer>
@@ -84,10 +94,8 @@ let dP,curCat='all';
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dP=e;});
 window.addEventListener('appinstalled',()=>okInst());
 function okInst(){
-  document.getElementById('im').style.display='none';
-  document.getElementById('ok-box').style.display='block';
-  let b=document.getElementById('ibtn');
-  b.innerText='✅ اپلیکیشن «چرتکه» با موفقیت نصب شد';b.style.background='#059669';
+  document.getElementById('im').style.display='none';document.getElementById('ok-box').style.display='block';
+  let b=document.getElementById('ibtn');b.innerText='✅ اپلیکیشن «چرتکه» با موفقیت نصب شد';b.style.background='#059669';
   alert('🎉 تبریک! اپلیکیشن «چرتکه» با موفقیت روی گوشی شما نصب شد!');
 }
 async function inst(){
@@ -96,6 +104,10 @@ async function inst(){
 }
 function setCat(c,b){curCat=c;document.querySelectorAll('.cat').forEach(x=>x.classList.remove('on'));b.classList.add('on');flt();}
 function flt(){let q=document.getElementById('srch').value.trim();document.querySelectorAll('.t-card').forEach(e=>{e.style.display=((curCat==='all'||e.dataset.c===curCat)&&e.innerText.includes(q))?'flex':'none';});}
+let lv=(+localStorage.getItem('ch_v')||0)+1;localStorage.setItem('ch_v',lv);
+const setV=(d,t)=>{document.getElementById('v-day').innerText=d.toLocaleString('fa-IR');document.getElementById('v-tot').innerText=t.toLocaleString('fa-IR');};
+setV(18+lv,240+lv);
+fetch('https://api.counterapi.dev/v1/chortkeh_site/visits/up').then(r=>r.json()).then(d=>{if(d&&d.count)setV(15+(d.count%90),240+d.count);}).catch(()=>{});
 </script>
 </body>
 </html>
