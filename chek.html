@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تبدیل عدد به حروف چک صیادی (تومان و ریال) | چرتکه</title>
+<link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+<main>
+  <div class="box">
+    <h1 style="font-size:17px;color:var(--pr);margin-bottom:14px">📝 تبدیل عدد به حروف (مخصوص نوشتن چک صیادی)</h1>
+    <div class="fg">
+      <label>واحد مبلغ ورودی را انتخاب کنید</label>
+      <select id="u" class="inp" style="direction:rtl;text-align:right" onchange="calc()">
+        <option value="t">من مبلغ را به «تومان» وارد می‌کنم</option>
+        <option value="r">من مبلغ را به «ریال» وارد می‌کنم</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>مبلغ را وارد کنید</label>
+      <input type="text" id="m" class="inp money" value="25,500,000" inputmode="numeric">
+    </div>
+    <button class="btn" onclick="calc()">تبدیل به حروف چک صیادی</button>
+    <div id="res" class="res">
+      <div class="r-row" style="flex-direction:column;gap:4px"><span>متن دقیق جهت درج روی چک (به ریال):</span><b id="r1" style="font-size:13.5px;color:#059669">-</b></div>
+      <div class="r-row" style="flex-direction:column;gap:4px"><span>معادل به حروف تومان:</span><b id="r2" style="font-size:13px">-</b></div>
+      <div class="r-row"><span>عدد ریالی کادر چک:</span><b id="r3" style="direction:ltr">-</b></div>
+    </div>
+  </div>
+  <div class="box seo">
+    <h2>آموزش نوشتن مبلغ چک صیادی به ریال و حروف</h2>
+    <p>در سامانه صیاد بانک مرکزی، تمامی مبالغ چک باید به ریال ثبت و نوشته شوند. برای تبدیل تومان به ریال کافی است یک صفر به جلوی عدد اضافه کنید.</p>
+  </div>
+</main>
+<script src="app.js?v=6"></script>
+<script>
+const O=['','یک','دو','سه','چهار','پنج','شش','هفت','هشت','نه'],T=['ده','یازده','دوازده','سیزده','چهارده','پانزده','شانزده','هفده','هجده','نوزده'],TW=['','','بیست','سی','چهل','پنجاه','شصت','هفتاد','هشتاد','نود'],H=['','یکصد','دویست','سیصد','چهارصد','پانصد','ششصد','هفتصد','هشتصد','نهصد'],U=['','هزار','میلیون','میلیارد','تریلیون'];
+function c3(n){
+  let o=[],h=Math.floor(n/100),t=n%100;
+  if(h)o.push(H[h]);
+  if(t>=10&&t<20)o.push(T[t-10]);
+  else{if(Math.floor(t/10))o.push(TW[Math.floor(t/10)]);if(t%10)o.push(O[t%10]);}
+  return o.join(' و ');
+}
+function wFa(n){
+  if(!n)return'صفر';let o=[],i=0;
+  while(n>0){let p=n%1000;if(p)o.unshift(c3(p)+(U[i]?' '+U[i]:''));n=Math.floor(n/1000);i++;}
+  return o.join(' و ');
+}
+function calc(){
+  let v=val('m'),u=document.getElementById('u').value;
+  if(!v)return;
+  let rial=u==='t'?v*10:v,tom=u==='t'?v:Math.floor(v/10);
+  document.getElementById('r1').innerText=wFa(rial)+' ریال تمام';
+  document.getElementById('r2').innerText=wFa(tom)+' تومان';
+  document.getElementById('r3').innerText=fmt(rial)+' ریال';
+  document.getElementById('res').classList.add('on');
+}
+</script>
+</body>
+</html>
