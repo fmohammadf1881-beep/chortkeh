@@ -6,15 +6,22 @@ Object.defineProperty(HTMLInputElement.prototype,"value",{
   get(){let v=vD.get.call(this);return this.id==="srch"?v:toEn(v);},
   set(v){if(this.type==="number"){this.type="text";this.setAttribute("inputmode","decimal");}vD.set.call(this,this.id==="srch"?v:toFa(v));}
 });
-let dP;window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();dP=e;});
 document.addEventListener("DOMContentLoaded",()=>{
   if(localStorage.getItem("ch_dark")==="1")document.body.classList.add("dark");
-  const isH=location.pathname.endsWith("index.html")||location.pathname.endsWith("/")||location.pathname.endsWith("/chortkeh");
   const isD=document.body.classList.contains("dark");
-  let d=new Date(),faD=new Intl.DateTimeFormat("fa-IR",{weekday:"long",day:"numeric",month:"long",year:"numeric"}).format(d);
-  let enD=new Intl.DateTimeFormat("en-US",{day:"numeric",month:"short",year:"numeric"}).format(d);
-  document.body.insertAdjacentHTML("afterbegin",`<header><div class="nav-c"><a href="index.html" class="logo">🧮 ${SITE_NAME}</a><div class="h-btns"><button onclick="instApp()" class="hm-btn" style="background:#10b981;font-weight:700">📲 نصب اپ</button><button id="dm-btn" onclick="tgDark()" class="hm-btn">${isD?"☀️":"🌙"}</button>${!isH?'<a href="index.html" class="hm-btn">🏠 خانه</a>':""}</div></div></header><div style="background:#1e293b;color:#fff;font-size:11px;padding:6px;text-align:center">📅 امروز: <b style="color:#38bdf8">${faD}</b> | میلادی: <span dir="ltr">${enD}</span></div>`);
-  document.body.insertAdjacentHTML("beforeend",`<footer>تمامی حقوق برای سایت <b>${SITE_NAME}</b> محفوظ است © ۱۴۰۴</footer>`);
+  document.head.insertAdjacentHTML("beforeend",`<style>@keyframes pls{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}#net-b{position:fixed;bottom:14px;left:12px;right:12px;max-width:420px;margin:auto;background:linear-gradient(135deg,#dc2626,#ea580c);color:#fff;padding:10px 14px;border-radius:14px;font-size:12px;font-weight:700;text-align:center;box-shadow:0 6px 20px #0005;z-index:999;display:none;animation:pls 1.4s infinite}</style>`);
+  if(!document.getElementById("m-hdr")){
+    document.body.insertAdjacentHTML("afterbegin",`<div id="net-b"></div><header id="m-hdr"><div class="nav-c"><a href="index.html" class="logo">🧮 ${SITE_NAME}</a><div class="h-btns"><button id="dm-btn" onclick="tgDark()" class="hm-btn">${isD?"☀️ روز":"🌙 شب"}</button><a href="index.html" class="hm-btn">🏠 همه ابزارها</a></div></div></header>`);
+    document.body.insertAdjacentHTML("beforeend",`<footer>تمامی حقوق برای سایت <b>${SITE_NAME}</b> محفوظ است © ۱۴۰۴</footer>`);
+  }
+  let nb=document.getElementById("net-b");
+  const shN=(m,ok)=>{if(!nb)return;nb.innerText=m;nb.style.background=ok?"#10b981":"linear-gradient(135deg,#dc2626,#ea580c)";nb.style.display="block";if(ok)setTimeout(()=>nb.style.display="none",2500);};
+  window.addEventListener("offline",()=>shN("📡 اینترنت شما قطع شد! (این ابزار بدون اینترنت هم کار می‌کند)"));
+  window.addEventListener("online",()=>shN("⚡ اتصال اینترنت برقرار شد!",1));
+  if(!navigator.onLine)shN("📡 اینترنت شما قطع یا بسیار ضعیف است!");
+  document.querySelectorAll("a[href]").forEach(a=>a.addEventListener("click",()=>{
+    setTimeout(()=>{if(document.visibilityState==="visible")shN("⏳ اینترنت شما ضعیف است؛ در حال انتقال...");},350);
+  }));
   document.querySelectorAll("input").forEach(el=>{if(el.id!=="srch")el.value=vD.get.call(el);});
   document.querySelectorAll(".money").forEach(inp=>{
     let w=document.createElement("div");w.className="w-out";inp.parentNode.appendChild(w);
@@ -34,23 +41,18 @@ document.addEventListener("DOMContentLoaded",()=>{
     b.innerText="📋 کپی نتیجه محاسبه";b.onclick=()=>copyRes(r,b);r.appendChild(b);
   });
 });
-function instApp(){
-  if(dP)dP.prompt();
-  else alert("📲 برای نصب اپلیکیشن چرتکه روی صفحه گوشی:\n۱. بالای مرورگر کروم روی سه نقطه (⋮) بزنید.\n۲. گزینه Add to Home screen (افزودن به صفحه اصلی) را بزنید.");
-}
 function tgDark(){
   let d=document.body.classList.toggle("dark");
   localStorage.setItem("ch_dark",d?"1":"0");
-  document.getElementById("dm-btn").innerText=d?"☀️":"🌙";
+  document.getElementById("dm-btn").innerText=d?"☀️ روز":"🌙 شب";
 }
 function copyRes(box,btn){
-  let t=`📊 نتیجه در ${SITE_NAME}:\n`;
+  let t=`📊 نتیجه در سایت ${SITE_NAME}:\n`;
   box.querySelectorAll(".r-row").forEach(r=>{
     let s=r.querySelector("span"),b=r.querySelector("b");
     if(s&&b)t+=`▪️ ${s.innerText} ${b.innerText}\n`;
   });
-  t+=`🔗 ${location.href}`;navigator.clipboard.writeText(t);
-  btn.innerText="✅ کپی شد!";
+  t+=`🔗 ${location.href}`;navigator.clipboard.writeText(t);btn.innerText="✅ کپی شد!";
 }
 function val(id){let el=document.getElementById(id);return el?Number(el.value.replace(/[^0-9.-]/g,""))||0:0;}
 function fmt(n){return Math.round(n).toLocaleString("fa-IR");}
