@@ -16,9 +16,12 @@
     <p>۲۲ ابزار دقیق و سریع برای محاسبات بانکی، طلا، چک، املاک و سلامت</p>
     <button id="ibtn" onclick="inst()" style="width:100%;background:#10b981;color:#fff;border:none;padding:9px;border-radius:10px;font-size:12px;font-weight:700;margin-top:10px;cursor:pointer">📲 نصب اپلیکیشن «چرتکه» روی صفحه اصلی گوشی</button>
     <div id="im" style="display:none;background:#f0fdf4;color:#065f46;border:1px solid #86efac;padding:10px;border-radius:10px;margin-top:8px;font-size:11.5px;text-align:right;line-height:1.9">
-      ۱. بالای مرورگر کروم روی <b>سه نقطه (⋮)</b> بزنید.<br>
-      ۲. گزینه <b>Add to Home screen (افزودن به صفحه اصلی)</b> را بزنید.<br>
-      <button onclick="okInst()" style="width:100%;background:#059669;color:#fff;border:none;padding:7px;border-radius:8px;margin-top:6px;font-weight:700;cursor:pointer">✅ به صفحه اصلی اضافه کردم (ثبت نصب)</button>
+      ۱. بالای مرورگر کروم روی <b>سه نقطه (⋮)</b> بزنید و <b>Add to Home screen</b> را انتخاب کنید.<br>
+      ۲. سپس روی دکمه زیر بزنید:<br>
+      <button onclick="okInst()" style="width:100%;background:#059669;color:#fff;border:none;padding:8px;border-radius:8px;margin-top:6px;font-weight:700;cursor:pointer">✅ نصب کردم (نمایش پیام تایید)</button>
+    </div>
+    <div id="ok-box" style="display:none;background:#dcfce7;color:#166534;border:1.5px solid #22c55e;padding:10px;border-radius:10px;margin-top:8px;font-size:12px;font-weight:700;text-align:center">
+      🎉 تبریک! اپلیکیشن «چرتکه» با موفقیت روی گوشی شما نصب شد!
     </div>
     <input type="text" id="srch" class="srch" placeholder="🔍 جستجو در بین ۲۲ ابزار (مثلا: چک، قسطی، طلا، وام...)" oninput="flt()">
     <div class="cats" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin-top:12px">
@@ -28,6 +31,31 @@
       <button class="cat" onclick="setCat('life',this)">📅 تاریخ و سلامت</button>
     </div>
   </div>
+  <script>
+  let dP,curCat='all';
+  function upClk(){
+    let ex=document.querySelector('header + div');if(ex)ex.remove();
+    let d=new Date(),fa=d.toLocaleDateString('fa-IR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}),ar=d.toLocaleDateString('ar-SA-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'}),en=d.toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}),tm=d.toLocaleTimeString('fa-IR',{hour12:false});
+    document.getElementById('t-bar').innerHTML=`📅 امروز: <b style="color:#38bdf8">${fa}</b> | قمری: ${ar} | <span dir="ltr">${en}</span> &nbsp;⏰ ساعت: <b style="color:#4ade80">${tm}</b>`;
+  }
+  upClk();setInterval(upClk,1000);
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dP=e;});
+  window.addEventListener('appinstalled',()=>okInst());
+  function okInst(){
+    document.getElementById('im').style.display='none';
+    document.getElementById('ok-box').style.display='block';
+    let b=document.getElementById('ibtn');
+    b.innerText='✅ اپلیکیشن «چرتکه» با موفقیت نصب شد';
+    b.style.background='#059669';
+    alert('🎉 تبریک! اپلیکیشن «چرتکه» با موفقیت نصب شد!');
+  }
+  async function inst(){
+    if(dP){dP.prompt();let r=await dP.userChoice;if(r.outcome==='accepted')okInst();}
+    else{let m=document.getElementById('im');m.style.display=m.style.display==='none'?'block':'none';}
+  }
+  function setCat(c,b){curCat=c;document.querySelectorAll('.cat').forEach(x=>x.classList.remove('on'));b.classList.add('on');flt();}
+  function flt(){let q=document.getElementById('srch').value.trim();document.querySelectorAll('.t-card').forEach(e=>{e.style.display=((curCat==='all'||e.dataset.c===curCat)&&e.innerText.includes(q))?'flex':'none';});}
+  </script>
   <div class="grid" id="grid">
     <a href="vam.html" class="t-card" data-c="bank"><div class="t-ic">🏦</div><b>محاسبه اقساط وام</b><span>قسط و سود بانکی</span></a>
     <a href="tala.html" class="t-card" data-c="bank"><div class="t-ic">🪙</div><b>محاسبه فاکتور طلا</b><span>طلای نو و دست‌دوم</span></a>
@@ -52,40 +80,7 @@
     <a href="bardari.html" class="t-card" data-c="life"><div class="t-ic">👶</div><b>محاسبه سن بارداری</b><span>هفته بارداری و زایمان</span></a>
     <a href="moadel.html" class="t-card" data-c="life"><div class="t-ic">🎓</div><b>محاسبه معدل کل</b><span>معدل دانشگاه و مدرسه</span></a>
   </div>
-  <div class="box" style="margin-top:16px;text-align:center;border:1.5px dashed var(--pr)">
-    <h2 style="font-size:14px;color:var(--pr);margin-bottom:4px">📢 جایگاه تبلیغات و معرفی کسب‌وکار شما</h2>
-    <p style="font-size:11.5px;color:var(--mu)">جهت درج بنر تبلیغاتی در سایت چرتکه با ما در ارتباط باشید.</p>
-  </div>
 </main>
 <script src="app.js?v=6"></script>
-<script>
-function upClk(){
-  let ex=document.querySelector('header + div');if(ex)ex.remove();
-  let d=new Date(),fa=d.toLocaleDateString('fa-IR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}),ar=d.toLocaleDateString('ar-SA-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'}),en=d.toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}),tm=d.toLocaleTimeString('fa-IR',{hour12:false});
-  document.getElementById('t-bar').innerHTML=`📅 امروز: <b style="color:#38bdf8">${fa}</b> | قمری: ${ar} | <span dir="ltr">${en}</span> &nbsp;⏰ ساعت: <b style="color:#4ade80">${tm}</b>`;
-}
-upClk();setInterval(upClk,1000);
-let dP,curCat='all';
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();dP=e;});
-window.addEventListener('appinstalled',()=>okInst());
-if(window.matchMedia('(display-mode: standalone)').matches||localStorage.getItem('ch_inst')==='1')setBtnOk();
-function setBtnOk(){
-  let b=document.getElementById('ibtn');
-  b.innerText='✅ اپلیکیشن «چرتکه» با موفقیت نصب شده است';
-  b.style.background='#059669';
-  document.getElementById('im').style.display='none';
-}
-function okInst(){
-  localStorage.setItem('ch_inst','1');setBtnOk();
-  alert('🎉 تبریک! اپلیکیشن «چرتکه» با موفقیت روی گوشی شما نصب شد!');
-}
-async function inst(){
-  if(localStorage.getItem('ch_inst')==='1'){alert('✅ اپلیکیشن چرتکه قبلاً روی گوشی شما نصب شده است!');return;}
-  if(dP){dP.prompt();let r=await dP.userChoice;if(r.outcome==='accepted')okInst();}
-  else{let m=document.getElementById('im');m.style.display=m.style.display==='none'?'block':'none';}
-}
-function setCat(c,b){curCat=c;document.querySelectorAll('.cat').forEach(x=>x.classList.remove('on'));b.classList.add('on');flt();}
-function flt(){let q=document.getElementById('srch').value.trim();document.querySelectorAll('.t-card').forEach(e=>{e.style.display=((curCat==='all'||e.dataset.c===curCat)&&e.innerText.includes(q))?'flex':'none';});}
-</script>
 </body>
 </html>
