@@ -10,11 +10,12 @@
 </head>
 <body>
 <main>
-  <div id="t-bar" style="background:#1e293b;color:#f8fafc;padding:9px;border-radius:12px;margin-bottom:12px;font-size:12px;text-align:center;line-height:1.9"></div>
+  <div id="t-bar" style="background:#1e293b;color:#f8fafc;padding:9px 10px;border-radius:12px;margin-bottom:12px;font-size:11.5px;text-align:center;line-height:1.9"></div>
   <script>
   function upClk(){
-    let d=new Date(),fa=d.toLocaleDateString('fa-IR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}),en=d.toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}),tm=d.toLocaleTimeString('fa-IR',{hour12:false});
-    document.getElementById('t-bar').innerHTML=`📅 امروز: <b style="color:#38bdf8">${fa}</b> | <span dir="ltr">${en}</span> &nbsp;⏰ ساعت: <b style="color:#4ade80;font-size:13px">${tm}</b>`;
+    let ex=document.querySelector('header + div');if(ex)ex.remove();
+    let d=new Date(),fa=d.toLocaleDateString('fa-IR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}),ar=d.toLocaleDateString('ar-SA-u-ca-islamic-umalqura',{day:'numeric',month:'long',year:'numeric'}),en=d.toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'}),tm=d.toLocaleTimeString('fa-IR',{hour12:false});
+    document.getElementById('t-bar').innerHTML=`📅 امروز: <b style="color:#38bdf8">${fa}</b> | قمری: ${ar} | <span dir="ltr">${en}</span> &nbsp;⏰ ساعت: <b style="color:#4ade80">${tm}</b>`;
   }
   upClk();setInterval(upClk,1000);
   </script>
