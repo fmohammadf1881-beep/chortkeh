@@ -10,61 +10,112 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build Logo, Favicon, Intro and APK
+      - name: Fix Inputs, Numbers and Build APK
         run: |
           BT=$(ls -d $ANDROID_SDK_ROOT/build-tools/* | sort -V | tail -n 1)
           PF=$(ls -d $ANDROID_SDK_ROOT/platforms/android-* | sort -V | tail -n 1)
           mkdir -p src/ir/chortkeh/app res/drawable obj
           cat << 'EOF' > MakeIcon.java
-          import java.awt.*;
-          import java.awt.image.BufferedImage;
-          import java.io.File;
-          import javax.imageio.ImageIO;
+          import java.awt.*; import java.awt.image.BufferedImage; import java.io.File; import javax.imageio.ImageIO;
           public class MakeIcon {
             static void m(int s, String p) throws Exception {
-              BufferedImage b = new BufferedImage(s, s, BufferedImage.TYPE_INT_ARGB);
-              Graphics2D g = b.createGraphics();
+              BufferedImage b = new BufferedImage(s, s, BufferedImage.TYPE_INT_ARGB); Graphics2D g = b.createGraphics();
               g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
               g.setPaint(new GradientPaint(0, 0, new Color(15, 23, 42), s, s, new Color(37, 99, 235)));
-              g.fillRoundRect(0, 0, s, s, s/4, s/4);
-              g.setColor(new Color(245, 158, 11));
-              g.setStroke(new BasicStroke(Math.max(2, s/28f)));
-              g.drawRoundRect(s/12, s/12, s - s/6, s - s/6, s/5, s/5);
-              g.setColor(Color.WHITE);
-              g.fillRoundRect((int)(s*0.20), (int)(s*0.16), (int)(s*0.60), (int)(s*0.68), s/8, s/8);
-              g.setColor(new Color(16, 185, 129));
-              g.fillRoundRect((int)(s*0.26), (int)(s*0.22), (int)(s*0.48), (int)(s*0.16), s/20, s/20);
-              int w = (int)(s*0.21), h = (int)(s*0.15), r = s/22, x1 = (int)(s*0.26), x2 = (int)(s*0.53), y1 = (int)(s*0.43), y2 = (int)(s*0.62);
-              g.setColor(new Color(37, 99, 235));
-              g.fillRoundRect(x1, y1, w, h, r, r); g.fillRoundRect(x2, y1, w, h, r, r); g.fillRoundRect(x1, y2, w, h, r, r);
-              g.setColor(new Color(245, 158, 11)); g.fillRoundRect(x2, y2, w, h, r, r);
-              g.setColor(Color.WHITE);
-              int t = Math.max(2, s/36);
-              g.fillRect(x1 + w/4, y1 + h/2 - t/2, w/2, t); g.fillRect(x1 + w/2 - t/2, y1 + h/4, t, h/2);
-              g.fillRect(x2 + w/4, y1 + h/2 - t/2, w/2, t); g.fillRect(x1 + w/4, y2 + h/2 - t/2, w/2, t);
-              g.fillRect(x2 + w/4, y2 + h/3, w/2, t); g.fillRect(x2 + w/4, y2 + (h*2)/3 - t, w/2, t);
+              g.fillRoundRect(0, 0, s, s, s/4, s/4); g.setColor(new Color(245, 158, 11));
+              g.setStroke(new BasicStroke(Math.max(2, s/28f))); g.drawRoundRect(s/12, s/12, s - s/6, s - s/6, s/5, s/5);
+              g.setColor(Color.WHITE); g.fillRoundRect((int)(s*0.20), (int)(s*0.16), (int)(s*0.60), (int)(s*0.68), s/8, s/8);
+              g.setColor(new Color(16, 185, 129)); g.fillRoundRect((int)(s*0.26), (int)(s*0.22), (int)(s*0.48), (int)(s*0.16), s/20, s/20);
+              int w=(int)(s*0.21),h=(int)(s*0.15),r=s/22,x1=(int)(s*0.26),x2=(int)(s*0.53),y1=(int)(s*0.43),y2=(int)(s*0.62);
+              g.setColor(new Color(37, 99, 235)); g.fillRoundRect(x1,y1,w,h,r,r); g.fillRoundRect(x2,y1,w,h,r,r); g.fillRoundRect(x1,y2,w,h,r,r);
+              g.setColor(new Color(245, 158, 11)); g.fillRoundRect(x2,y2,w,h,r,r); g.setColor(Color.WHITE); int t=Math.max(2,s/36);
+              g.fillRect(x1+w/4,y1+h/2-t/2,w/2,t); g.fillRect(x1+w/2-t/2,y1+h/4,t,h/2); g.fillRect(x2+w/4,y1+h/2-t/2,w/2,t);
+              g.fillRect(x1+w/4,y2+h/2-t/2,w/2,t); g.fillRect(x2+w/4,y2+h/3,w/2,t); g.fillRect(x2+w/4,y2+(h*2)/3-t,w/2,t);
               g.dispose(); ImageIO.write(b, "png", new File(p));
             }
-            public static void main(String[] a) throws Exception { m(512, "logo.png"); m(192, "res/drawable/icon.png"); m(48, "favicon.ico"); }
+            public static void main(String[] a) throws Exception { m(512,"logo.png"); m(192,"res/drawable/icon.png"); m(48,"favicon.ico"); }
           }
           EOF
           javac MakeIcon.java && java MakeIcon && rm -f MakeIcon.*
-          python3 -c '
-          import glob
-          tag = "<link rel=\"icon\" type=\"image/png\" sizes=\"512x512\" href=\"logo.png\"><link rel=\"shortcut icon\" href=\"favicon.ico\"><link rel=\"apple-touch-icon\" href=\"logo.png\">"
+          cat << 'EOF' > app.js
+          const SITE_NAME="چرتکه",PD="۰۱۲۳۴۵۶۷۸۹",AD="٠١٢٣٤٥٦٧٨٩";
+          const toEn=s=>String(s??"").replace(/[۰-۹]/g,d=>PD.indexOf(d)).replace(/[٠-٩]/g,d=>AD.indexOf(d)).replace(/[٫/]/g,".");
+          const toFa=s=>String(s??"").replace(/[0-9]/g,d=>PD[d]).replace(/[٠-٩]/g,d=>PD[AD.indexOf(d)]);
+          const origLS=Number.prototype.toLocaleString;
+          Number.prototype.toLocaleString=function(...a){return toFa(origLS.apply(this,a));};
+          const vD=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,"value");
+          Object.defineProperty(HTMLInputElement.prototype,"value",{
+            get(){let v=vD.get.call(this);return this.id==="srch"?v:toEn(v);},
+            set(v){if(this.type==="number"){this.type="text";this.setAttribute("inputmode","decimal");}vD.set.call(this,this.id==="srch"?v:toFa(v));}
+          });
+          const TG_S=`<svg width="17" height="17" viewBox="0 0 24 24" fill="#fff"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.56 8.25l-1.9 8.96c-.14.64-.52.8-1.05.5l-2.9-2.14-1.4 1.35c-.15.15-.28.28-.58.28l.2-2.95 5.38-4.86c.23-.2-.05-.32-.36-.12l-6.65 4.18-2.86-.9c-.62-.2-.63-.62.13-.92l11.18-4.3c.52-.2.97.12.81.92z"/></svg>`;
+          const RB_S=`<svg width="17" height="17" viewBox="0 0 24 24"><rect x="2" y="2" width="6" height="6" rx="1.5" fill="#ff3b30"/><rect x="9" y="2" width="6" height="6" rx="1.5" fill="#ff9500"/><rect x="16" y="2" width="6" height="6" rx="1.5" fill="#ffcc00"/><rect x="2" y="9" width="6" height="6" rx="1.5" fill="#34c759"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="#00c7be"/><rect x="16" y="9" width="6" height="6" rx="1.5" fill="#30b0c7"/><rect x="2" y="16" width="6" height="6" rx="1.5" fill="#007aff"/><rect x="9" y="16" width="6" height="6" rx="1.5" fill="#5856d6"/><rect x="16" y="16" width="6" height="6" rx="1.5" fill="#af52de"/></svg>`;
+          const EM_S=`<svg width="17" height="17" viewBox="0 0 24 24" fill="#ea4335"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`;
+          const FAQS=[["فرمول محاسبه قیمت طلای نو و دست دوم در چرتکه چگونه است؟","طبق قانون اتحادیه، مالیات ۱۰ درصد فقط بر روی جمع اجرت و سود طلافروش محاسبه می‌شود و اصل طلا معاف است."],["نحوه محاسبه قسط وام و تبدیل شبا به حساب چگونه است؟","مبلغ وام و سود را وارد کنید تا قسط دقیق محاسبه شود؛ همچنین در بخش شبا می‌توانید شبا و شماره حساب تمام بانک‌ها را به هم تبدیل کنید."]];
+          function prepIn(el){
+            if(!el||el.tagName!=="INPUT"||el.type==="button"||el.type==="submit"||el.type==="checkbox"||el.type==="radio")return;
+            if(el.id!=="srch"){el.type="text";el.setAttribute("inputmode","decimal");}
+            if(el.placeholder)el.placeholder=toFa(el.placeholder);
+            let raw=vD.get.call(el);
+            if(raw&&el.id!=="srch"){if(!el.placeholder)el.placeholder=toFa(raw);vD.set.call(el,"");}
+          }
+          document.addEventListener("focusin",e=>{
+            const el=e.target;
+            if(el&&el.tagName==="INPUT"&&el.type!=="button"&&el.type!=="submit"){
+              if(el.id!=="srch"){el.type="text";el.setAttribute("inputmode","decimal");}
+              vD.set.call(el,"");
+            }
+          },true);
+          document.addEventListener("input",e=>{
+            const el=e.target;
+            if(el&&el.tagName==="INPUT"){
+              let raw=vD.get.call(el),fa=toFa(raw);
+              if(raw!==fa){let p=el.selectionStart;vD.set.call(el,fa);try{el.setSelectionRange(p,p);}catch(x){}}
+            }
+          },true);
+          function faNode(n){
+            if(n.nodeType===3){let t=n.nodeValue,f=toFa(t);if(t!==f)n.nodeValue=f;}
+            else if(n.nodeType===1&&n.tagName!=="SCRIPT"&&n.tagName!=="STYLE"){
+              if(n.tagName==="INPUT")prepIn(n);
+              n.childNodes.forEach(faNode);
+            }
+          }
+          document.addEventListener("DOMContentLoaded",()=>{
+            if(!sessionStorage.getItem("ch_in")){sessionStorage.setItem("ch_in","1");const sp=document.createElement("div");sp.style.cssText="position:fixed;inset:0;background:linear-gradient(135deg,#0f172a,#1e40af);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;transition:opacity .4s";sp.innerHTML=`<img src="logo.png" style="width:88px;height:88px;border-radius:22px;box-shadow:0 8px 25px rgba(0,0,0,.4);margin-bottom:14px"><div style="font-size:1.4rem;font-weight:800">چرتکه</div><div style="font-size:.82rem;color:#cbd5e1;margin-top:4px">جعبه ابزار هوشمند محاسباتی</div>`;document.body.appendChild(sp);setTimeout(()=>{sp.style.opacity="0";setTimeout(()=>sp.remove(),400)},750);}
+            document.querySelectorAll("input").forEach(prepIn);
+            faNode(document.body);
+            new MutationObserver(ms=>ms.forEach(m=>{if(m.type==="characterData")faNode(m.target);else m.addedNodes.forEach(faNode);})).observe(document.body,{childList:true,subtree:true,characterData:true});
+            const st=document.createElement("style");
+            st.textContent=`input:focus::placeholder{color:transparent!important;opacity:0!important}#ld-bar{position:fixed;top:0;right:0;height:3px;width:0;background:#10b981;z-index:9999;transition:width .3s}.faq-b{background:#fff;border-radius:14px;padding:14px;margin-top:16px;border:1px solid #e2e8f0}.faq-b details{border-bottom:1px solid #f1f5f9;padding:8px 0}.faq-b summary{font-weight:700;font-size:.84rem;cursor:pointer}.faq-b p{font-size:.8rem;color:#475569;margin:6px 0 0}`;
+            document.head.appendChild(st);
+            if(!document.getElementById("m-hdr")){
+              const sh=new Intl.DateTimeFormat("fa-IR",{dateStyle:"full"}).format(new Date()),hdr=document.createElement("header");
+              hdr.innerHTML=`<div style="max-width:600px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 8px"><a href="index.html" style="color:#fff;text-decoration:none;font-weight:800;font-size:1.05rem"><img src="logo.png" style="width:24px;height:24px;vertical-align:middle;border-radius:6px"> ${SITE_NAME}</a><span style="font-size:.75rem;opacity:.9">📅 ${sh}</span><a href="index.html" style="background:rgba(255,255,255,.2);color:#fff;padding:4px 10px;border-radius:8px;text-decoration:none;font-size:.78rem">🏠 صفحه اصلی</a></div>`;
+              document.body.insertBefore(hdr,document.body.firstChild);
+            }
+            const mn=document.querySelector(".container")||document.querySelector("main")||document.body;
+            if(!document.getElementById("faq-sec")){
+              const fq=document.createElement("div");fq.id="faq-sec";fq.className="faq-b";
+              fq.innerHTML=`<div style="font-weight:800;font-size:.9rem;color:#1e40af;margin-bottom:6px">❓ سوالات متداول</div>`+FAQS.map(x=>`<details><summary>${x[0]}</summary><p>${x[1]}</p></details>`).join("");
+              const ad=document.getElementById("ad-box");if(ad&&ad.parentNode===mn)mn.insertBefore(fq,ad);else mn.appendChild(fq);
+            }
+            if(!document.getElementById("ad-box")){
+              const bx=document.createElement("div");bx.style.cssText="background:#fff;border-radius:14px;padding:14px;margin-top:14px;border:1px solid #e2e8f0;text-align:center";
+              bx.innerHTML=`<div style="font-weight:800;font-size:.9rem;margin-bottom:8px;color:#1e293b">📢 سفارش تبلیغات و ارتباط با مدیریت</div><div style="display:flex;gap:8px;justify-content:center;margin-bottom:8px"><a href="https://t.me/Mohamadseccret" target="_blank" style="background:#0088cc;color:#fff;padding:7px 12px;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:700;display:inline-flex;align-items:center;gap:5px">${TG_S} تلگرام</a><a href="https://rubika.ir/mmmdrz_f" target="_blank" style="background:#1e293b;color:#fff;padding:7px 12px;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:700;display:inline-flex;align-items:center;gap:5px">${RB_S} روبیکا</a></div><div style="font-size:.78rem;color:#475569;display:flex;align-items:center;justify-content:center;gap:5px">${EM_S} ایمیل: <a href="mailto:fmohammadf1881@gmail.com" style="color:#2563eb;text-decoration:none;font-weight:700">fmohammadf1881@gmail.com</a></div>`;
+              mn.appendChild(bx);
+            }
+          });
+          EOF
+          cat << 'EOF' > fix.py
+          import glob, re
           for f in glob.glob("*.html"):
             s = open(f, encoding="utf-8").read()
-            if "rel=\"icon\"" not in s: s = s.replace("<head>", "<head>" + tag, 1)
-            s = s.replace("🧮 چرتکه", "<img src=\"logo.png\" style=\"width:28px;height:28px;vertical-align:middle;border-radius:7px;margin-left:6px\">چرتکه")
+            s = re.sub(r'type=["\']number["\']', 'type="text" inputmode="decimal"', s)
+            s = re.sub(r'app\.js(\?v=\d+)?', 'app.js?v=9', s)
             open(f, "w", encoding="utf-8").write(s)
-          a = open("app.js", encoding="utf-8").read()
-          intro = "if(!sessionStorage.getItem(\"ch_in\")){sessionStorage.setItem(\"ch_in\",\"1\");const sp=document.createElement(\"div\");sp.style.cssText=\"position:fixed;inset:0;background:linear-gradient(135deg,#0f172a,#1e40af);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;transition:opacity .4s\";sp.innerHTML=`<img src=\"logo.png\" style=\"width:88px;height:88px;border-radius:22px;box-shadow:0 8px 25px rgba(0,0,0,.4);margin-bottom:14px\"><div style=\"font-size:1.4rem;font-weight:800\">چرتکه</div><div style=\"font-size:.82rem;color:#cbd5e1;margin-top:4px\">جعبه ابزار هوشمند محاسباتی</div>`;document.body.appendChild(sp);setTimeout(()=>{sp.style.opacity=\"0\";setTimeout(()=>sp.remove(),400)},850);}"
-          if "ch_in" not in a:
-            a = a.replace("document.addEventListener(\"DOMContentLoaded\",()=>{", "document.addEventListener(\"DOMContentLoaded\",()=>{" + intro, 1)
-            a = a.replace("🧮 ${SITE_NAME}", "<img src=\"logo.png\" style=\"width:24px;height:24px;vertical-align:middle;border-radius:6px\"> ${SITE_NAME}")
-            open("app.js", "w", encoding="utf-8").write(a)
-          '
-          echo '<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android" package="ir.chortkeh.app" android:versionCode="3" android:versionName="1.2"><uses-sdk android:minSdkVersion="21" android:targetSdkVersion="33"/><uses-permission android:name="android.permission.INTERNET"/><application android:label="چرتکه" android:icon="@drawable/icon" android:usesCleartextTraffic="true" android:theme="@android:style/Theme.DeviceDefault.NoActionBar"><activity android:name=".MainActivity" android:exported="true" android:configChanges="orientation|screenSize|keyboardHidden"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > AndroidManifest.xml
+          EOF
+          python3 fix.py && rm -f fix.py
+          echo '<?xml version="1.0" encoding="utf-8"?><manifest xmlns:android="http://schemas.android.com/apk/res/android" package="ir.chortkeh.app" android:versionCode="4" android:versionName="1.3"><uses-sdk android:minSdkVersion="21" android:targetSdkVersion="33"/><uses-permission android:name="android.permission.INTERNET"/><application android:label="چرتکه" android:icon="@drawable/icon" android:usesCleartextTraffic="true" android:theme="@android:style/Theme.DeviceDefault.NoActionBar"><activity android:name=".MainActivity" android:exported="true" android:configChanges="orientation|screenSize|keyboardHidden"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity></application></manifest>' > AndroidManifest.xml
           cat << 'EOF' > src/ir/chortkeh/app/MainActivity.java
           package ir.chortkeh.app;
           import android.app.Activity; import android.content.Intent; import android.graphics.*; import android.graphics.drawable.GradientDrawable;
@@ -72,9 +123,8 @@ jobs:
           public class MainActivity extends Activity {
             WebView w; LinearLayout sp;
             @Override protected void onCreate(Bundle b) {
-              super.onCreate(b);
-              FrameLayout root = new FrameLayout(this);
-              w = new WebView(this); WebSettings s = w.getSettings(); s.setJavaScriptEnabled(true); s.setDomStorageEnabled(true);
+              super.onCreate(b); FrameLayout root = new FrameLayout(this);
+              w = new WebView(this); WebSettings s = w.getSettings(); s.setJavaScriptEnabled(true); s.setDomStorageEnabled(true); w.clearCache(true);
               sp = new LinearLayout(this); sp.setOrientation(LinearLayout.VERTICAL); sp.setGravity(Gravity.CENTER);
               sp.setBackground(new GradientDrawable(GradientDrawable.Orientation.TL_BR, new int[]{0xFF0F172A, 0xFF1E40AF}));
               ImageView im = new ImageView(this); im.setImageResource(R.drawable.icon);
@@ -82,13 +132,13 @@ jobs:
               TextView t1 = new TextView(this); t1.setText("چرتکه"); t1.setTextColor(Color.WHITE); t1.setTextSize(26); t1.setTypeface(null, Typeface.BOLD); t1.setGravity(Gravity.CENTER); sp.addView(t1);
               TextView t2 = new TextView(this); t2.setText("جعبه ابزار هوشمند محاسباتی"); t2.setTextColor(0xFFCBD5E1); t2.setTextSize(14); t2.setGravity(Gravity.CENTER);
               LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(-2, -2); lp2.topMargin = 10; lp2.bottomMargin = 50; sp.addView(t2, lp2);
-              ProgressBar pb = new ProgressBar(this); sp.addView(pb, new LinearLayout.LayoutParams(90, 90));
+              sp.addView(new ProgressBar(this), new LinearLayout.LayoutParams(90, 90));
               w.setWebViewClient(new WebViewClient() {
                 @Override public void onPageFinished(WebView v, String u) { sp.animate().alpha(0f).setDuration(400).withEndAction(() -> sp.setVisibility(View.GONE)); }
                 @Override public boolean shouldOverrideUrlLoading(WebView v, String u) { if (u.contains("github.io")) return false; startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(u))); return true; }
               });
               root.addView(w); root.addView(sp); setContentView(root);
-              w.loadUrl("https://fmohammadf1881-beep.github.io/chortkeh/");
+              w.loadUrl("https://fmohammadf1881-beep.github.io/chortkeh/?v=9");
             }
             @Override public void onBackPressed() { if (w != null && w.canGoBack()) w.goBack(); else super.onBackPressed(); }
           }
@@ -97,11 +147,9 @@ jobs:
           javac -source 8 -target 8 -cp "$PF/android.jar" -d obj src/ir/chortkeh/app/*.java
           $BT/d8 --lib "$PF/android.jar" --output . obj/ir/chortkeh/app/*.class
           $BT/aapt package -f -M AndroidManifest.xml -S res -I "$PF/android.jar" -F unaligned.apk
-          $BT/aapt add unaligned.apk classes.dex
-          $BT/zipalign -f 4 unaligned.apk aligned.apk
+          $BT/aapt add unaligned.apk classes.dex && $BT/zipalign -f 4 unaligned.apk aligned.apk
           keytool -genkeypair -v -keystore key.jks -alias ch -keyalg RSA -keysize 2048 -validity 10000 -storepass 123456 -keypass 123456 -dname "CN=Chortkeh,O=Chortkeh,C=IR"
           $BT/apksigner sign --ks key.jks --ks-pass pass:123456 --key-pass pass:123456 --out chortkeh.apk aligned.apk
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add -A && git commit -m "Add favicon, header logo, and splash intro" || true
+          git config user.name "github-actions" && git config user.email "actions@github.com"
+          git add -A && git commit -m "Fix all inputs to clear on tap and force Persian digits" || true
           git push
