@@ -18,7 +18,7 @@ const FAQS=[
   ["محاسبه مهریه به نرخ روز و سن دقیق شمسی چطور انجام می‌شود؟","ابزار مهریه چرتکه بر اساس آخرین شاخص تورم بانک مرکزی مبلغ مهریه را به نرخ روز محاسبه می‌کند و ابزار محاسبه سن، اختلاف دقیق تاریخ تولد تا امروز را به سال، ماه و روز نشان می‌دهد."]
 ];
 
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener("DOMContentLoaded",()=>{if(!sessionStorage.getItem("ch_in")){sessionStorage.setItem("ch_in","1");const sp=document.createElement("div");sp.style.cssText="position:fixed;inset:0;background:linear-gradient(135deg,#0f172a,#1e40af);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;transition:opacity .4s";sp.innerHTML=`<img src="logo.png" style="width:88px;height:88px;border-radius:22px;box-shadow:0 8px 25px rgba(0,0,0,.4);margin-bottom:14px"><div style="font-size:1.4rem;font-weight:800">چرتکه</div><div style="font-size:.82rem;color:#cbd5e1;margin-top:4px">جعبه ابزار هوشمند محاسباتی</div>`;document.body.appendChild(sp);setTimeout(()=>{sp.style.opacity="0";setTimeout(()=>sp.remove(),400)},850);}
   document.querySelectorAll('input[type="number"],input:not([type])').forEach(el=>{
     if(el.id==="srch")return;
     el.type="text";el.setAttribute("inputmode","decimal");
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   if(!document.getElementById("m-hdr")){
     const now=new Date(),sh=new Intl.DateTimeFormat("fa-IR",{dateStyle:"full"}).format(now);
     const hdr=document.createElement("header");
-    hdr.innerHTML=`<div style="max-width:600px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 8px"><a href="index.html" style="color:#fff;text-decoration:none;font-weight:800;font-size:1.05rem">🧮 ${SITE_NAME}</a><span style="font-size:.75rem;opacity:.9">📅 ${sh}</span><a href="index.html" style="background:rgba(255,255,255,.2);color:#fff;padding:4px 10px;border-radius:8px;text-decoration:none;font-size:.78rem">🏠 صفحه اصلی</a></div>`;
+    hdr.innerHTML=`<div style="max-width:600px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;padding:0 8px"><a href="index.html" style="color:#fff;text-decoration:none;font-weight:800;font-size:1.05rem"><img src="logo.png" style="width:24px;height:24px;vertical-align:middle;border-radius:6px"> ${SITE_NAME}</a><span style="font-size:.75rem;opacity:.9">📅 ${sh}</span><a href="index.html" style="background:rgba(255,255,255,.2);color:#fff;padding:4px 10px;border-radius:8px;text-decoration:none;font-size:.78rem">🏠 صفحه اصلی</a></div>`;
     document.body.insertBefore(hdr,document.body.firstChild);
   }
 
