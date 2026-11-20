@@ -1,4 +1,5 @@
 const SITE_NAME="چرتکه",PD="۰۱۲۳۴۵۶۷۸۹",AD="٠١٢٣٤٥٦٧٨٩";
+const isApp=/; wv\)|Android.*Version\//i.test(navigator.userAgent);
 const toEn=s=>String(s??"").replace(/[۰-۹]/g,d=>PD.indexOf(d)).replace(/[٠-٩]/g,d=>AD.indexOf(d)).replace(/[٫/]/g,".");
 const toFa=s=>String(s??"").replace(/[0-9]/g,d=>PD[d]).replace(/[٠-٩]/g,d=>PD[AD.indexOf(d)]);
 const vD=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,"value");
@@ -13,10 +14,10 @@ function prep(el){if(!el||el.tagName!=="INPUT"||el.id==="srch"||el.dataset.u||SK
 document.addEventListener("focusin",e=>{let el=e.target;if(!el||el.tagName!=="INPUT"||el.id==="srch")return;el.type="text";el.setAttribute("inputmode","decimal");vD.set.call(el,"");},true);
 document.addEventListener("input",e=>{let el=e.target;if(!el||el.tagName!=="INPUT")return;el.dataset.u="1";let r=vD.get.call(el),f=toFa(r);if(r!==f){let p=el.selectionStart;vD.set.call(el,f);try{el.setSelectionRange(p,p);}catch(x){}}},true);
 function faAll(n){if(!n)return;if(n.nodeType===3){let t=n.nodeValue,f=toFa(t);if(t!==f)n.nodeValue=f;}else if(n.nodeType===1&&n.tagName!=="SCRIPT"&&n.tagName!=="STYLE"){if(n.tagName==="INPUT")prep(n);n.childNodes.forEach(faAll);}}
-function run(){document.querySelectorAll("input").forEach(prep);faAll(document.body);}
+function run(){document.querySelectorAll("input").forEach(prep);faAll(document.body);if(isApp){const vt=document.getElementById("v-today");if(vt&&vt.closest("div"))vt.closest("div").style.display="none";}}
 document.addEventListener("DOMContentLoaded",()=>{
   const st=document.createElement("style");
-  st.textContent="input::placeholder{color:#94a3b8!important;opacity:1!important}input:focus::placeholder{color:transparent!important;opacity:0!important}.faq-b{background:#fff;border-radius:14px;padding:14px;margin-top:16px;border:1px solid #e2e8f0}.faq-b details{border-bottom:1px solid #f1f5f9;padding:8px 0}.faq-b details:last-child{border:none}.faq-b summary{font-weight:700;font-size:.84rem;color:#1e293b;cursor:pointer;list-style:none;display:flex;justify-content:space-between}.faq-b summary::after{content:'➕';font-size:.75rem;color:#2563eb}.faq-b details[open] summary::after{content:'➖'}.faq-b p{font-size:.8rem;color:#475569;line-height:1.7;margin:6px 0 0;background:#f8fafc;padding:8px;border-radius:8px}";
+  st.textContent="input::placeholder{color:#94a3b8!important;opacity:1!important}input:focus::placeholder{color:transparent!important;opacity:0!important}.faq-b{background:#fff;border-radius:14px;padding:14px;margin-top:16px;border:1px solid #e2e8f0}.faq-b details{border-bottom:1px solid #f1f5f9;padding:8px 0}.faq-b details:last-child{border:none}.faq-b summary{font-weight:700;font-size:.84rem;color:#1e293b;cursor:pointer;list-style:none;display:flex;justify-content:space-between}.faq-b summary::after{content:'➕';font-size:.75rem;color:#2563eb}.faq-b details[open] summary::after{content:'➖'}.faq-b p{font-size:.8rem;color:#475569;line-height:1.7;margin:6px 0 0;background:#f8fafc;padding:8px;border-radius:8px}"+(isApp?"#v-box,#pwa-btn{display:none!important}":"");
   document.head.appendChild(st);
   if(!document.getElementById("m-hdr")){
     const sh=new Intl.DateTimeFormat("fa-IR",{dateStyle:"full"}).format(new Date()),h=document.createElement("header");
