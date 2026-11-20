@@ -14,6 +14,15 @@ function prep(el){if(!el||el.tagName!=="INPUT"||el.id==="srch"||el.dataset.u||SK
 document.addEventListener("focusin",e=>{let el=e.target;if(!el||el.tagName!=="INPUT"||el.id==="srch")return;el.type="text";el.setAttribute("inputmode","decimal");vD.set.call(el,"");},true);
 document.addEventListener("input",e=>{let el=e.target;if(!el||el.tagName!=="INPUT")return;el.dataset.u="1";let r=vD.get.call(el),f=toFa(r);if(r!==f){let p=el.selectionStart;vD.set.call(el,f);try{el.setSelectionRange(p,p);}catch(x){}}},true);
 function faAll(n){if(!n)return;if(n.nodeType===3){let t=n.nodeValue,f=toFa(t);if(t!==f)n.nodeValue=f;}else if(n.nodeType===1&&n.tagName!=="SCRIPT"&&n.tagName!=="STYLE"){if(n.tagName==="INPUT")prep(n);n.childNodes.forEach(faAll);}}
+function syncV(){
+  if(isApp)return;
+  const vt=document.getElementById("v-today"),vl=document.getElementById("v-total");
+  if(vt)vt.textContent=toFa(localStorage.getItem("ch_rd")||"۱");
+  if(vl)vl.textContent=toFa(localStorage.getItem("ch_rt")||"۱");
+  const dk="d"+new Date().toISOString().slice(0,10).replace(/-/g,""),B="https://api.counterapi.dev/v1/chortkeh_ir_real";
+  fetch(`${B}/${dk}/up`).then(r=>r.json()).then(d=>{if(d&&d.count){localStorage.setItem("ch_rd",d.count);if(vt)vt.textContent=d.count.toLocaleString();}}).catch(()=>{});
+  fetch(`${B}/total/up`).then(r=>r.json()).then(d=>{if(d&&d.count){localStorage.setItem("ch_rt",d.count);if(vl)vl.textContent=d.count.toLocaleString();}}).catch(()=>{});
+}
 function run(){document.querySelectorAll("input").forEach(prep);faAll(document.body);if(isApp){const vt=document.getElementById("v-today");if(vt&&vt.closest("div"))vt.closest("div").style.display="none";}}
 document.addEventListener("DOMContentLoaded",()=>{
   const st=document.createElement("style");
@@ -35,7 +44,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     b.innerHTML=`<div style="font-weight:800;font-size:.9rem;margin-bottom:8px">📢 سفارش تبلیغات و ارتباط با مدیریت</div><div style="display:flex;gap:8px;justify-content:center;margin-bottom:8px"><a href="https://t.me/Mohamadseccret" target="_blank" style="background:#0088cc;color:#fff;padding:7px 12px;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:700;display:inline-flex;align-items:center;gap:5px">${TG_S} تلگرام</a><a href="https://rubika.ir/mmmdrz_f" target="_blank" style="background:#1e293b;color:#fff;padding:7px 12px;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:700;display:inline-flex;align-items:center;gap:5px">${RB_S} روبیکا</a></div><div style="font-size:.78rem;display:flex;align-items:center;justify-content:center;gap:5px">${EM_S} <a href="mailto:fmohammadf1881@gmail.com" style="color:#2563eb;text-decoration:none;font-weight:700">fmohammadf1881@gmail.com</a></div>`;
     mn.appendChild(b);
   }
-  run();setTimeout(run,120);
+  run();syncV();setTimeout(run,120);
   new MutationObserver(m=>m.forEach(x=>{if(x.type==="characterData")faAll(x.target);else x.addedNodes.forEach(faAll);})).observe(document.body,{childList:true,subtree:true,characterData:true});
 });
 window.addEventListener("load",run);
