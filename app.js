@@ -1,7 +1,9 @@
+(()=>{
 const SITE_NAME="چرتکه",PD="۰۱۲۳۴۵۶۷۸۹",AD="٠١٢٣٤٥٦٧٨٩";
 const isApp=/; wv\)|Android.*Version\//i.test(navigator.userAgent);
 const toEn=s=>String(s??"").replace(/[۰-۹]/g,d=>PD.indexOf(d)).replace(/[٠-٩]/g,d=>AD.indexOf(d)).replace(/[,٬\s]/g,"").replace(/[٫/]/g,".");
 const toFa=s=>String(s??"").replace(/[0-9]/g,d=>PD[d]).replace(/[٠-٩]/g,d=>PD[AD.indexOf(d)]);
+window.toEn=toEn;window.toFa=toFa;
 const noSep=()=>/(kart|sen|tarikh|faseleh|bardari)/.test(location.pathname);
 function fmt(s,el){
   if(!s||(el&&el.id==="srch"))return s||"";
@@ -13,9 +15,6 @@ function fmt(s,el){
   i=i.replace(/^0+(?=\d)/,"").replace(/\B(?=(\d{3})+(?!\d))/g,",");
   return toFa(d!==undefined?i+"."+d:i);
 }
-const _pf=window.parseFloat,_pi=window.parseInt;
-window.parseFloat=function(s){return _pf(typeof s==="string"?toEn(s):s)||0;};
-window.parseInt=function(s,r){return _pi(typeof s==="string"?toEn(s):s,r||10)||0;};
 const vD=Object.getOwnPropertyDescriptor(HTMLInputElement.prototype,"value");
 Object.defineProperty(HTMLInputElement.prototype,"value",{
   get(){
@@ -28,10 +27,8 @@ Object.defineProperty(HTMLInputElement.prototype,"value",{
     vD.set.call(this,this.id==="srch"?v:fmt(v,this));
   }
 });
-Object.defineProperty(HTMLInputElement.prototype,"valueAsNumber",{
-  get(){return parseFloat(this.value)||0;}
-});
-const _ls=Number.prototype.toLocaleString;Number.prototype.toLocaleString=function(...a){return toFa(_ls.apply(this,a)).replace(/٬/g,",");};
+const _ls=Number.prototype.toLocaleString;
+Number.prototype.toLocaleString=function(...a){return toFa(_ls.apply(this,a)).replace(/٬/g,",");};
 const TG_S=`<svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.56 8.25l-1.9 8.96c-.14.64-.52.8-1.05.5l-2.9-2.14-1.4 1.35c-.15.15-.28.28-.58.28l.2-2.95 5.38-4.86c.23-.2-.05-.32-.36-.12l-6.65 4.18-2.86-.9c-.62-.2-.63-.62.13-.92l11.18-4.3c.52-.2.97.12.81.92z"/></svg>`;
 const RB_S=`<svg width="16" height="16" viewBox="0 0 24 24"><rect x="2" y="2" width="6" height="6" rx="1.5" fill="#ff3b30"/><rect x="9" y="2" width="6" height="6" rx="1.5" fill="#ff9500"/><rect x="16" y="2" width="6" height="6" rx="1.5" fill="#ffcc00"/><rect x="2" y="9" width="6" height="6" rx="1.5" fill="#34c759"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="#00c7be"/><rect x="16" y="9" width="6" height="6" rx="1.5" fill="#30b0c7"/><rect x="2" y="16" width="6" height="6" rx="1.5" fill="#007aff"/><rect x="9" y="16" width="6" height="6" rx="1.5" fill="#5856d6"/><rect x="16" y="16" width="6" height="6" rx="1.5" fill="#af52de"/></svg>`;
 const EM_S=`<svg width="16" height="16" viewBox="0 0 24 24" fill="#ea4335"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>`;
@@ -104,4 +101,5 @@ document.addEventListener("DOMContentLoaded",()=>{
   new MutationObserver(m=>m.forEach(x=>{if(x.type==="characterData")faAll(x.target);else x.addedNodes.forEach(faAll);})).observe(document.body,{childList:true,subtree:true,characterData:true});
 });
 window.addEventListener("load",run);
+})();
 // پایان کد
