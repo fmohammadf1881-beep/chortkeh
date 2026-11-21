@@ -4,6 +4,9 @@ const isApp=/; wv\)|Android.*Version\//i.test(navigator.userAgent);
 const toEn=s=>String(s??"").replace(/[۰-۹]/g,d=>PD.indexOf(d)).replace(/[٠-٩]/g,d=>AD.indexOf(d)).replace(/[,٬\s]/g,"").replace(/[٫/]/g,".");
 const toFa=s=>String(s??"").replace(/[0-9]/g,d=>PD[d]).replace(/[٠-٩]/g,d=>PD[AD.indexOf(d)]);
 window.toEn=toEn;window.toFa=toFa;
+const _pf=window.parseFloat,_pi=window.parseInt;
+window.parseFloat=function(s){return _pf(typeof s==="string"?toEn(s):s);};
+window.parseInt=function(s,r){return _pi(typeof s==="string"?toEn(s):s,r||10);};
 const noSep=()=>/(kart|sen|tarikh|faseleh|bardari)/.test(location.pathname);
 function fmt(s,el){
   if(!s||(el&&el.id==="srch"))return s||"";
@@ -20,12 +23,22 @@ Object.defineProperty(HTMLInputElement.prototype,"value",{
   get(){
     let v=vD.get.call(this);if(this.id==="srch")return v;
     let c=toEn(v).trim();
-    return(c===""&&this.dataset.def)?this.dataset.def:c;
+    if(c!=="")return c;
+    if(!/kart/.test(location.pathname)){
+      let ph=toEn(this.getAttribute("placeholder")||"");
+      let m=ph.match(/\d+(\.\d+)?/);
+      if(m)return m[0];
+    }
+    return "";
   },
   set(v){
     if(this.type==="number"){this.type="text";this.setAttribute("inputmode","decimal");}
     vD.set.call(this,this.id==="srch"?v:fmt(v,this));
   }
+});
+Object.defineProperty(HTMLInputElement.prototype,"valueAsNumber",{
+  get(){let n=parseFloat(this.value);return isNaN(n)?0:n;},
+  set(v){this.value=v;}
 });
 const _ls=Number.prototype.toLocaleString;
 Number.prototype.toLocaleString=function(...a){return toFa(_ls.apply(this,a)).replace(/٬/g,",");};
@@ -47,24 +60,22 @@ function prep(el){
   if(!el||el.tagName!=="INPUT"||el.id==="srch"||el.dataset.p||SK.includes((el.type||"").toLowerCase()))return;
   el.dataset.p="1";
   let r=vD.get.call(el)||el.getAttribute("value")||"";
-  if(r)el.dataset.def=toEn(r);
   el.type="text";el.setAttribute("inputmode","decimal");
   let p=(el.getAttribute("placeholder")||r).trim();
   if(p){
-    let fp=toFa(toEn(p).replace(/\d+/g,m=>fmt(m,el)));
+    let fp=toFa(toEn(p).replace(/\d+(\.\d+)?/g,m=>fmt(m,el)));
     if(!fp.includes("مثلا")&&!fp.includes("مثال"))fp="مثلاً "+fp;
     el.setAttribute("placeholder",fp);
   }
-  if(r)vD.set.call(el,fmt(r,el));
 }
 document.addEventListener("focusin",e=>{
   let el=e.target;if(!el||el.tagName!=="INPUT"||el.id==="srch")return;
   if(el.type==="number"){el.type="text";el.setAttribute("inputmode","decimal");}
-  if(!el.dataset.u){el.dataset.u="1";vD.set.call(el,"");}
+  if(!el.dataset.c){el.dataset.c="1";vD.set.call(el,"");}
 },true);
 document.addEventListener("input",e=>{
   let el=e.target;if(!el||el.tagName!=="INPUT"||el.id==="srch")return;
-  el.dataset.u="1";
+  el.dataset.c="1";
   let r=vD.get.call(el),f=fmt(r,el);
   if(r!==f){vD.set.call(el,f);try{el.setSelectionRange(f.length,f.length);}catch(x){}}
 },true);
